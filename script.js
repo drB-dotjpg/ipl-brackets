@@ -8,27 +8,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 function pageLoad() {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const urlParams = new URLSearchParams(window.location.search);
         const bracketId = urlParams.get("bracketId");
-        const round = urlParams.get("round");
+        const round = (_a = parseInt(urlParams.get("round"))) !== null && _a !== void 0 ? _a : 1;
+        const minRound = (_b = urlParams.get("minRound")) !== null && _b !== void 0 ? _b : "1";
+        console.log(minRound);
         const battlefyRes = yield getMatchesFromBracketID(bracketId);
         const bracketStyle = battlefyRes.bracketType;
         const matches = battlefyRes.matches;
-        console.log(bracketStyle, matches);
         const zoom = document.getElementById("zoom");
         switch (bracketStyle) {
             case "singleelim":
-                zoom.appendChild(getEliminationElement(matches));
+                zoom.appendChild(getEliminationElement(matches, parseInt(minRound)));
                 break;
             case "doubleelim":
-                zoom.appendChild(getDoubleEliminationElement(matches));
+                zoom.appendChild(getDoubleEliminationElement(matches, parseInt(minRound)));
                 break;
             case "swiss":
-                zoom.appendChild(getSwissElement(matches, parseInt(round)));
+                zoom.appendChild(getSwissElement(matches, round));
                 break;
             case "roundrobin":
-                zoom.appendChild(getRoundRobinElement(matches, parseInt(round)));
+                zoom.appendChild(getRoundRobinElement(matches, round));
         }
         centerOnElements();
     });
@@ -177,7 +179,7 @@ function moveCamera(x, y, scale) {
     camera.style.transform = `translate(${x}px, ${y}px)`;
     zoom.style.transform = `scale(${scale.toString()})`;
 }
-function getDoubleEliminationElement(matches) {
+function getDoubleEliminationElement(matches, minRound) {
     const element = document.createElement("div");
     const winnersMatches = [];
     const losersMatches = [];
@@ -189,21 +191,22 @@ function getDoubleEliminationElement(matches) {
             losersMatches.push(matches[i]);
         }
     }
-    const winnersElement = getEliminationElement(winnersMatches, "winners");
+    const winnersElement = getEliminationElement(winnersMatches, minRound, "winners");
     winnersElement.dataset.bracketType = "winners";
-    const losersElement = getEliminationElement(losersMatches, "losers");
+    const losersMinRound = minRound == 1 ? minRound : minRound + 1;
+    const losersElement = getEliminationElement(losersMatches, losersMinRound, "losers");
     losersElement.dataset.bracketType = "losers";
     element.appendChild(winnersElement);
     element.appendChild(losersElement);
     return element;
 }
-function getEliminationElement(matches, roundNaming) {
+function getEliminationElement(matches, minRound, roundNaming) {
     const element = document.createElement("div");
     element.className = "elim-bracket-wrapper";
     element.classList.add("bracket");
     const roundElims = [];
     const roundsNum = Math.max(...matches.map(o => o.roundNumber));
-    for (var i = 0; i < roundsNum; i++) {
+    for (var i = minRound - 1; i < roundsNum; i++) {
         const roundElim = document.createElement("div");
         roundElim.className = "elim-grid-wrapper";
         const roundHeader = document.createElement("div");
@@ -227,14 +230,17 @@ function getEliminationElement(matches, roundNaming) {
         roundElims.push(roundElim);
         element.appendChild(roundElim);
     }
+    console.log(roundElims, matches);
     for (var i = 0; i < matches.length; i++) {
-        const elim = getEliminationStyleMatchElement(matches[i]);
-        if (matches[i].roundNumber != 0) {
-            roundElims[matches[i].roundNumber - 1].appendChild(elim);
-        }
-        else {
-            elim.classList.add("elim-third");
-            roundElims[roundElims.length - 1].appendChild(elim);
+        if (matches[i].roundNumber >= minRound) {
+            const elim = getEliminationStyleMatchElement(matches[i]);
+            if (matches[i].roundNumber != 0) {
+                roundElims[matches[i].roundNumber - minRound].appendChild(elim);
+            }
+            else {
+                elim.classList.add("elim-third");
+                roundElims[roundElims.length - 1].appendChild(elim);
+            }
         }
     }
     return element;

@@ -1,4 +1,4 @@
-function getDoubleEliminationElement(matches: Match[]) : HTMLElement{
+function getDoubleEliminationElement(matches: Match[], minRound: number) : HTMLElement{
     const element: HTMLElement = document.createElement("div");
     
     const winnersMatches: Match[] = [];
@@ -12,9 +12,10 @@ function getDoubleEliminationElement(matches: Match[]) : HTMLElement{
         }
     }
 
-    const winnersElement: HTMLElement = getEliminationElement(winnersMatches, "winners");
+    const winnersElement: HTMLElement = getEliminationElement(winnersMatches, minRound, "winners");
     winnersElement.dataset.bracketType = "winners";
-    const losersElement: HTMLElement = getEliminationElement(losersMatches, "losers");
+    const losersMinRound = minRound == 1 ? minRound : minRound + 1;
+    const losersElement: HTMLElement = getEliminationElement(losersMatches, losersMinRound, "losers");
     losersElement.dataset.bracketType = "losers";
 
     element.appendChild(winnersElement);
@@ -23,7 +24,7 @@ function getDoubleEliminationElement(matches: Match[]) : HTMLElement{
     return element;
 }
 
-function getEliminationElement(matches: Match[], roundNaming?: "winners" | "losers") : HTMLElement {
+function getEliminationElement(matches: Match[], minRound: number, roundNaming?: "winners" | "losers") : HTMLElement {
     const element: HTMLElement = document.createElement("div");
     element.className = "elim-bracket-wrapper";
     element.classList.add("bracket");
@@ -31,7 +32,7 @@ function getEliminationElement(matches: Match[], roundNaming?: "winners" | "lose
     const roundElims: HTMLElement[] = [];
     const roundsNum = Math.max(...matches.map(o => o.roundNumber));
 
-    for (var i = 0; i < roundsNum; i++){
+    for (var i = minRound-1; i < roundsNum; i++){
         const roundElim = document.createElement("div");
         roundElim.className = "elim-grid-wrapper";
         const roundHeader = document.createElement("div");
@@ -58,13 +59,16 @@ function getEliminationElement(matches: Match[], roundNaming?: "winners" | "lose
         element.appendChild(roundElim);
     }
 
+    console.log(roundElims, matches)
     for (var i = 0; i < matches.length; i++){
-        const elim = getEliminationStyleMatchElement(matches[i]);
-        if (matches[i].roundNumber != 0){
-            roundElims[matches[i].roundNumber-1].appendChild(elim);
-        } else {
-            elim.classList.add("elim-third")
-            roundElims[roundElims.length-1].appendChild(elim);
+        if (matches[i].roundNumber >= minRound){
+            const elim = getEliminationStyleMatchElement(matches[i]);
+            if (matches[i].roundNumber != 0){
+                roundElims[matches[i].roundNumber-minRound].appendChild(elim);
+            } else {
+                elim.classList.add("elim-third")
+                roundElims[roundElims.length-1].appendChild(elim);
+            }
         }
     }
 

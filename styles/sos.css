@@ -1,13 +1,12 @@
 :root{
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Dosis', sans-serif;
     font-weight: 600;
 
-    --off-white: #FBFBFB;
-    --lavender: #EAE4F7;
-    --purple: #7D30F0;
-    --purple-a: #7D30F022;
-    --indigo: #3E0099;
-    --yellow: #FFE80A;
+    --off-white: #F3F9FA;
+    --seafoam: #CEF7E7;
+    --dark-teal: #335563;
+    --blue-grey: #4D6C72;
+    --dark-blue: #191A34;
 }
 
 body {
@@ -17,7 +16,7 @@ body {
 #bracket-zone{
     width: 1920px;
     height: 1080px;
-    background-image: url("../assets/pg-bg.png");
+    background: linear-gradient(180deg, var(--off-white) 0%, var(--seafoam) 100%);
 }
 
 #camera {
@@ -41,7 +40,7 @@ body {
 }
 
 .elim-grid-wrapper > .grid-header{
-    color: var(--indigo);
+    color: var(--dark-blue);
     text-align: center;
     font-size: 1em;
     font-weight: bold;
@@ -53,11 +52,14 @@ body {
     flex-direction: column;
     align-items: stretch;
     flex-wrap: nowrap;
-    background-color: var(--off-white);
+    color: white;
+    background: linear-gradient(180deg, var(--blue-grey) -100%, var(--dark-blue) 100%);
     font-size: .8em;
     margin: .1em 0;
-    border: 1px solid var(--indigo);
-    box-shadow: -3px 1.5px 0px var(--indigo);
+    border: 1px solid var(--dark-teal);
+    overflow: hidden;
+    border-radius: .65em;
+    box-shadow: 0 0 32px #19191944;
 }
 
 .elim-round-wrapper > .team-wrapper {
@@ -66,11 +68,10 @@ body {
     justify-content: flex-start;
     white-space: nowrap;
     min-width: 8em;
-    color: var(--indigo);
 }
 
 .elim-round-wrapper > .team-wrapper:first-child{
-    border-bottom: 1px solid var(--indigo);
+    border-bottom: 1px solid var(--dark-teal);
 }
 
 .elim-round-wrapper > .team-wrapper > .seed {
@@ -81,7 +82,8 @@ body {
     min-width: 1.2em;
     text-align: center;
     margin-right: .35em;
-    background-color: rgba(0, 0, 0, 0.060);
+    background-color: rgba(255, 255, 255, 0.120);
+    border-radius: 100%;
 }
 
 .elim-round-wrapper > .team-wrapper > .team {
@@ -92,12 +94,12 @@ body {
 .elim-round-wrapper > .team-wrapper > .score {
     font-weight: 700;
     padding: .1em 0;
-    width: 2ch;
+    width: 2.5ch;
     margin-left: .35em;
     text-align: center;
-    color: white;
-    background-color: var(--purple);
-    border-left: 1px solid var(--indigo);
+    color: var(--dark-blue);
+    background-color: var(--off-white);
+    border-left: 1px solid var(--dark-teal);
 }
 
 .group-bracket-wrapper {
@@ -166,6 +168,7 @@ body {
 }
 
 .winner > .team {
+    color: var(--seafoam);
     font-weight: 700 !important;
 }
 
@@ -182,18 +185,18 @@ body {
 }
 
 div[data-round-status="in-progress"]{
-    animation: in-prog-flash 2s infinite;
+    animation: in-prog-flash 3s infinite;
 }
 
 @keyframes in-prog-flash {
     0% {
-        border-color: var(--indigo);
+        background: var(--dark-blue);
     }
     50% {
-        border-color: var(--yellow);
+        background: var(--blue-grey);
     }
     100% {
-        border-color: var(--indigo);
+        background: var(--dark-blue);
     }
 }
 

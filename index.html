@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IPL Brackets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            font-family: 'Open Sans', sans-serif;
+            font-size: 24px;
+        }
+
+        body{
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(30deg, lightgreen -80%, white 90%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            max-width: 60em;
+            padding: 1em 2em;
+            margin: 0 3em;
+            color: white;
+            background: #00000066;
+            border-radius: 1em;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        input[type=text] {
+            appearance: none;
+            background: #FFFFFFAA;
+            border: none;
+            border-radius: 1em;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 24px;
+            text-align: center;
+            padding: .25em;
+            min-width: 20em;
+        }
+
+        .button-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 1em;
+        }
+
+        .button {
+            background: #FFFFFFAA;
+            padding: .5em 1em;
+            border-radius: 1em;
+            color: black;
+            cursor: pointer;
+        }
+
+        .button:not(:first-child){
+            margin-left: .5em;
+        }
+    </style>
+    <script>
+        function onClick(event){
+            const outElim = document.getElementById("out");
+            const bracketId = document.getElementById("bracketId").value;
+            outElim.value = `${window.location.href}graphics/${event}.html?bracketId=${bracketId}`;
+        }
+    </script>
+</head>
+<body>
+    <div class="content">
+        <h1>IPL Brackets</h1>
+        <h3>Enter the bracket ID</h3>
+        <input id="bracketId" type="text" placeholder="Battlefy Bracket ID">
+        <p><i>How to get bracket ID: </i> Go to the tournament battlefy, then go to the bracket page. Copy the ID from the page URL.&NewLine;
+        Example: https://battlefy.com/inkling-performance-labs/low-ink-january-2023/63b1f24b2395cc75cdfa7da1/stage/<b style="color:lightblue;">63cd3461c6def52051bec9a1</b>/bracket/</p>
+        <h3>Choose graphics</h3>
+        <div class="button-wrapper">
+            <div class="button" onclick="onClick('sos')">Swim or Sink</div>
+            <div class="button" onclick="onClick('pg')">Proving Grounds</div>
+        </div>
+        <h3>Add the following URL as a browser source in OBS.</h3>
+        <input id="out" type="text" placeholder="Output URL" disabled>
+    </div>
+</body>
+</html>
