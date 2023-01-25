@@ -25,17 +25,17 @@ function centerOnElements(){
     var scale = 1;
     
     if (targetWidth > root.clientWidth){
-        scale = (root.clientWidth / Math.max(targetWidth, 500)) * .97;
+        scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
 
         if (targetHeight * scale > root.clientHeight){
-            scale = (root.clientHeight / Math.max(targetHeight, 500)) * .97;
+            scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 500)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
         
         if (targetWidth * scale > root.clientWidth){
-            scale = (root.clientWidth / Math.max(targetWidth, 500)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
         }
     }
 

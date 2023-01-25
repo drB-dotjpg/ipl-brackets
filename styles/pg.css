@@ -175,8 +175,9 @@ body {
 }
 .elim-third::before{
     content: "Third Place";
-    background-color: rgba(0, 0, 0, 0.068);
-    color: grey;
+    background: var(--off-white);
+    border-bottom: 1px solid var(--indigo);
+    color: var(--indigo);
     font-size: .6em;
     padding: .05rem .25rem;
 }

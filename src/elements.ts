@@ -61,14 +61,12 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
 
     console.log(roundElims, matches)
     for (var i = 0; i < matches.length; i++){
+        const elim = getEliminationStyleMatchElement(matches[i]);
         if (matches[i].roundNumber >= minRound){
-            const elim = getEliminationStyleMatchElement(matches[i]);
-            if (matches[i].roundNumber != 0){
-                roundElims[matches[i].roundNumber-minRound].appendChild(elim);
-            } else {
-                elim.classList.add("elim-third")
-                roundElims[roundElims.length-1].appendChild(elim);
-            }
+            roundElims[matches[i].roundNumber-minRound].appendChild(elim);
+        } else {
+            elim.classList.add("elim-third")
+            roundElims[roundElims.length-1].appendChild(elim);
         }
     }
 

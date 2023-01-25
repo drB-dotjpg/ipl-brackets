@@ -1,12 +1,13 @@
 :root{
-    font-family: 'Dosis', sans-serif;
-    font-weight: 600;
+    font-family: 'Kanit', sans-serif;
+    font-weight: 400;
 
-    --off-white: #F3F9FA;
-    --seafoam: #CEF7E7;
-    --dark-teal: #335563;
-    --blue-grey: #4D6C72;
-    --dark-blue: #191A34;
+    --dark-blue: #00153E;
+    --blue: #003366;
+    --lighter-blue: #004488;
+    --red: #F00A4B;
+
+    color: white;
 }
 
 body {
@@ -16,7 +17,7 @@ body {
 #bracket-zone{
     width: 1920px;
     height: 1080px;
-    background: linear-gradient(180deg, var(--off-white) 0%, var(--seafoam) 100%);
+    background: var(--dark-blue);
 }
 
 #camera {
@@ -40,7 +41,6 @@ body {
 }
 
 .elim-grid-wrapper > .grid-header{
-    color: var(--dark-blue);
     text-align: center;
     font-size: 1em;
     font-weight: bold;
@@ -52,14 +52,9 @@ body {
     flex-direction: column;
     align-items: stretch;
     flex-wrap: nowrap;
-    color: white;
-    background: linear-gradient(180deg, var(--blue-grey) -100%, var(--dark-blue) 100%);
+    background-color: var(--blue);
     font-size: .8em;
     margin: .1em 0;
-    border: 1px solid var(--dark-teal);
-    overflow: hidden;
-    border-radius: .65em;
-    box-shadow: 0 0 32px #19191944;
 }
 
 .elim-round-wrapper > .team-wrapper {
@@ -71,35 +66,33 @@ body {
 }
 
 .elim-round-wrapper > .team-wrapper:first-child{
-    border-bottom: 1px solid var(--dark-teal);
+    border-bottom: 1px solid var(--lighter-blue);
 }
 
 .elim-round-wrapper > .team-wrapper > .seed {
-    font-weight: 400;
+    font-weight: 300;
     transform-origin: center;
-    scale: .8;
+    scale: .7;
     opacity: .85;
     min-width: 1.2em;
     text-align: center;
     margin-right: .35em;
-    background-color: rgba(255, 255, 255, 0.120);
-    border-radius: 100%;
+    background-color: var(--lighter-blue)
 }
 
 .elim-round-wrapper > .team-wrapper > .team {
-    font-weight: 500;
+    font-weight: 400;
     margin-right: auto;
 }
 
 .elim-round-wrapper > .team-wrapper > .score {
     font-weight: 700;
-    padding: .1em 0;
-    width: 2.5ch;
+    padding: .05em 0;
+    width: 2.2ch;
     margin-left: .35em;
     text-align: center;
-    color: var(--dark-blue);
-    background-color: var(--off-white);
-    border-left: 1px solid var(--dark-teal);
+    color: white;
+    background-color: var(--lighter-blue);
 }
 
 .group-bracket-wrapper {
@@ -163,13 +156,13 @@ body {
 }
 
 
-.winner {
-    background: linear-gradient(90deg, var(--purple-a) 0%, transparent 75%);
+.winner > .team {
+    font-weight: 700 !important;
+    text-shadow: 0 0 .6em var(--red);
 }
 
-.winner > .team {
-    color: var(--seafoam);
-    font-weight: 700 !important;
+.winner > .score {
+    background-color: var(--red) !important;
 }
 
 .elim-third{
@@ -178,25 +171,25 @@ body {
 }
 .elim-third::before{
     content: "Third Place";
-    background-color: var(--blue-grey);
-    color: white;
-    font-size: .75em;
-    padding: .05rem .5rem;
+    background: var(--lighter-blue);
+    font-size: .70em;
+    padding: .05rem .25rem;
 }
 
 div[data-round-status="in-progress"]{
-    animation: in-prog-flash 3s infinite;
+    animation: in-prog-flash 1.5s infinite;
+    border: 2px solid;
 }
 
 @keyframes in-prog-flash {
     0% {
-        background: var(--dark-blue);
+        border-color: var(--red);
     }
     50% {
-        background: var(--blue-grey);
+        border-color: var(--lighter-blue);
     }
     100% {
-        background: var(--dark-blue);
+        border-color: var(--red);
     }
 }
 
