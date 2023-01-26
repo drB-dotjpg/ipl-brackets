@@ -37,7 +37,7 @@ function pageLoad() {
         document.getElementById("title").innerText = title;
         setTimeout(() => {
             centerOnElements();
-        }, 750);
+        }, 250);
     });
 }
 function updateGraphicURLs(event) {
