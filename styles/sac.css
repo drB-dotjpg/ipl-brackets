@@ -14,9 +14,23 @@ body {
     margin: 0;
 }
 
+#title {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 1920px;
+    height: 60px;
+    font-size: 3em;
+    background: var(--blue);
+    color: white;
+    border-bottom: 4px solid var(--red);
+    z-index: 1;
+}
+
 #bracket-zone{
     width: 1920px;
-    height: 1080px;
+    height: calc(1080px - 60px);
     background: var(--dark-blue);
 }
 

@@ -148,11 +148,6 @@ function getSwissElement(matches: Match[], round: number): HTMLElement {
     element.className = "group-bracket-wrapper";
     element.classList.add("bracket");
 
-    const header = document.createElement("div");
-    header.className = "group-header";
-    header.innerText = "Round " + round.toString();
-    element.appendChild(header);
-
     for (var i = 0; i < matches.length; i++){
         if (matches[i].roundNumber == round){
             element.appendChild(getGroupStyleMatchElement(matches[i]));
@@ -166,11 +161,6 @@ function getRoundRobinElement(matches: Match[], round: number): HTMLElement {
     const element = document.createElement("div");
     element.className = "roundrobin-bracket-wrapper";
     element.classList.add("bracket");
-
-    const title = document.createElement("div");
-    title.classList.add("title");
-    title.innerText = `Round ${round}`;
-    element.appendChild(title);
 
     const groups = Array.apply(null, Array(matches[matches.length-1].group)).map(function () { return [] });
 

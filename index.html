@@ -15,18 +15,17 @@
 
         body{
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background: linear-gradient(30deg, lightgreen -80%, white 90%);
             display: flex;
             justify-content: center;
-            align-items: center;
         }
 
         .content {
             max-width: 60em;
             padding: 1em 2em;
-            margin: 0 3em;
+            margin: 3em;
             color: white;
             background: #00000077;
             border-radius: 2em;
@@ -51,7 +50,6 @@
         .button-wrapper {
             display: flex;
             justify-content: center;
-            padding: 1em;
         }
 
         .button {
@@ -74,6 +72,8 @@
         <input id="bracketId" type="text" placeholder="Battlefy Bracket ID">
         <p><i>How to get bracket ID: </i> Go to the tournament battlefy, then go to the desired bracket page. Copy the ID from the page URL.&NewLine;
         Example: https://battlefy.com/inkling-performance-labs/low-ink-january-2023/63b1f24b2395cc75cdfa7da1/stage/<b style="color:lightblue;">63cd3461c6def52051bec9a1</b>/bracket/</p>
+        <h3>Enter the title of the bracket</h3>
+        <input id="bracketTitle" type="text" placeholder="Bracket Title">
         <h3>Choose graphics</h3>
         <div class="button-wrapper">
             <div class="button" onclick="updateGraphicURLs('sos')">Swim or Sink</div>

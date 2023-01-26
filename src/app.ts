@@ -4,7 +4,8 @@ async function pageLoad(){
     const round = parseInt(urlParams.get("round")) ?? 1;
     const minRound = urlParams.get("minRound") ?? "1";
     const focus = urlParams.get("focus") ?? "none";
-    console.log(minRound)
+    const title = urlParams.get("title");
+    console.log(minRound);
 
     const battlefyRes = await getMatchesFromBracketID(bracketId);
     const bracketStyle = battlefyRes.bracketType;
@@ -24,6 +25,9 @@ async function pageLoad(){
         case "roundrobin":
             zoom.appendChild(getRoundRobinElement(matches, round));
     }
+
+    document.getElementById("title").innerText = title;
+
     setTimeout(() => { //bad code but fixes a bug only happening on OBS
         centerOnElements();
     }, 250);
@@ -32,6 +36,7 @@ async function pageLoad(){
 async function updateGraphicURLs(event){
     const outElim = document.getElementById("out") as HTMLInputElement;
     const bracketId = (document.getElementById("bracketId") as HTMLInputElement).value;
+    const bracketTitle = (document.getElementById("bracketTitle") as HTMLInputElement).value;
 
     const matchesReq = await getMatchesFromBracketID(bracketId);
     const bracketType = matchesReq.bracketType;
@@ -41,25 +46,25 @@ async function updateGraphicURLs(event){
 
     switch (bracketType){
         case "doubleelim":
-            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}`);
-            urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&focus=winners`);
-            urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&focus=losers`);
-            if (numRounds > 3){
-                urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds-3}`);
+            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
+            urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Winners`)}&focus=winners`);
+            urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Losers`)}&focus=losers`);
+            if (numRounds > 4){
+                urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds-3}`);
             }
             break;
         
         case "singleelim":
-            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}`);
+            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
             if (numRounds > 5){
-                urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds-3}`);
+                urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds-3}`);
             }
             break;
 
         case "roundrobin":
         case "swiss":
             for (let i = 1; i <= numRounds; i++){
-                urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&round=${i}`);
+                urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Round ${i}`)}&round=${i}`);
             }
             break;
     }
