@@ -30,7 +30,7 @@ async function pageLoad(){
 
     setTimeout(() => { //bad code but fixes a bug only happening on OBS
         centerOnElements();
-    }, 750);
+    }, 800);
 }
 
 async function updateGraphicURLs(event){
