@@ -30,7 +30,7 @@ body {
 
 #bracket-zone{
     width: 1920px;
-    height: 1080px;
+    height: calc(1080px - 60px);
     background-image: url("../assets/pg-bg.png");
 }
 

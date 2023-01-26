@@ -30,7 +30,7 @@ async function pageLoad(){
 
     setTimeout(() => { //bad code but fixes a bug only happening on OBS
         centerOnElements();
-    }, 800);
+    }, 750);
 }
 
 async function updateGraphicURLs(event){
@@ -50,7 +50,7 @@ async function updateGraphicURLs(event){
             urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Winners`)}&focus=winners`);
             urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Losers`)}&focus=losers`);
             if (numRounds > 4){
-                urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds-3}`);
+                urls.push(`Top 24:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 24`)}&minRound=${numRounds-3}`);
             }
             break;
         
