@@ -140,6 +140,7 @@ body {
     border: .15em solid var(--dark-teal);
     border-radius: .75em;
     font-weight: 500;
+    box-shadow: 0 0 32px #19191944;
 }
 
 .group-round-wrapper > .team-wrapper {
