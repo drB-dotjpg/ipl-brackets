@@ -33,7 +33,9 @@ function pageLoad() {
             case "roundrobin":
                 zoom.appendChild(getRoundRobinElement(matches, round));
         }
-        centerOnElements();
+        setTimeout(() => {
+            centerOnElements();
+        }, 250);
     });
 }
 function updateGraphicURLs(event) {

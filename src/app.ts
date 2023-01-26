@@ -24,7 +24,9 @@ async function pageLoad(){
         case "roundrobin":
             zoom.appendChild(getRoundRobinElement(matches, round));
     }
-    centerOnElements();
+    setTimeout(() => { //bad code but fixes a bug only happening on OBS
+        centerOnElements();
+    }, 250);
 }
 
 async function updateGraphicURLs(event){
