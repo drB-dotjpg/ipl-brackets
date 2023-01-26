@@ -14,6 +14,20 @@ body {
     margin: 0;
 }
 
+#title {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 1920px;
+    height: 60px;
+    font-size: 2.6em;
+    background: var(--purple);
+    color: white;
+    border-bottom: 4px solid var(--indigo);
+    z-index: 1;
+}
+
 #bracket-zone{
     width: 1920px;
     height: 1080px;
@@ -106,10 +120,11 @@ body {
 }
 
 .group-bracket-wrapper > .group-header {
-    color: white;
-    font-size: 1.2em;
+    color: var(--indigo);
+    font-size: 1.4em;
     font-weight: bold;
-    margin-bottom: .1em;
+    margin: .15em 0;
+    text-align: center;
 }
 
 .group-round-wrapper {
@@ -118,8 +133,11 @@ body {
     align-items: center;
     justify-content: center;
     background-color: white;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     font-size: 1em;
+    color: var(--indigo);
+    border: 1px solid var(--indigo);
+    box-shadow: -2px 2px 0px var(--indigo);
 }
 
 .group-round-wrapper > .team-wrapper {
@@ -147,19 +165,29 @@ body {
     width: 2.5ch;
     height: fit-content;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.068);
+    color: white;
+    background-color: var(--purple);
+    border: 0 solid var(--indigo);
+    border-left-width: 2px;
+    border-right-width: 2px;
 }
-
 
 .roundrobin-bracket-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
+.roundrobin-bracket-wrapper > .title{
+    grid-column: 1 / 3;
+    font-size: 3em;
+    color: var(--indigo);
+    font-weight: 700;
+    text-align: center;
+}
+
 .roundrobin-bracket-wrapper > .group-bracket-wrapper {
     margin: 0 15px;
 }
-
 
 .winner {
     background: linear-gradient(90deg, var(--purple-a) 0%, transparent 75%);
@@ -167,6 +195,13 @@ body {
 
 .winner > .team {
     font-weight: 700 !important;
+}
+
+.group-round-wrapper > .winner:nth-child(1){
+    background: linear-gradient(90deg, transparent 0%, var(--purple-a) 90%, transparent 91%);
+}
+.group-round-wrapper > .winner:nth-child(2){
+    background: linear-gradient(270deg, transparent 0%, var(--purple-a) 90%, transparent 91%);
 }
 
 .elim-third{

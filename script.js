@@ -15,6 +15,7 @@ function pageLoad() {
         const round = (_a = parseInt(urlParams.get("round"))) !== null && _a !== void 0 ? _a : 1;
         const minRound = (_b = urlParams.get("minRound")) !== null && _b !== void 0 ? _b : "1";
         const focus = (_c = urlParams.get("focus")) !== null && _c !== void 0 ? _c : "none";
+        const title = urlParams.get("title");
         console.log(minRound);
         const battlefyRes = yield getMatchesFromBracketID(bracketId);
         const bracketStyle = battlefyRes.bracketType;
@@ -33,6 +34,7 @@ function pageLoad() {
             case "roundrobin":
                 zoom.appendChild(getRoundRobinElement(matches, round));
         }
+        document.getElementById("title").innerText = title;
         setTimeout(() => {
             centerOnElements();
         }, 250);
@@ -42,6 +44,7 @@ function updateGraphicURLs(event) {
     return __awaiter(this, void 0, void 0, function* () {
         const outElim = document.getElementById("out");
         const bracketId = document.getElementById("bracketId").value;
+        const bracketTitle = document.getElementById("bracketTitle").value;
         const matchesReq = yield getMatchesFromBracketID(bracketId);
         const bracketType = matchesReq.bracketType;
         const numRounds = matchesReq.numRounds;
@@ -49,17 +52,23 @@ function updateGraphicURLs(event) {
         const urls = [];
         switch (bracketType) {
             case "doubleelim":
-                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}`);
-                urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&focus=winners`);
-                urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&focus=losers`);
-                if (numRounds > 3) {
-                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds - 3}`);
+                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
+                urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Winners`)}&focus=winners`);
+                urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Losers`)}&focus=losers`);
+                if (numRounds > 4) {
+                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds - 3}`);
                 }
                 break;
             case "singleelim":
-                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}`);
+                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
                 if (numRounds > 5) {
-                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds - 3}`);
+                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds - 3}`);
+                }
+                break;
+            case "roundrobin":
+            case "swiss":
+                for (let i = 1; i <= numRounds; i++) {
+                    urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Round ${i}`)}&round=${i}`);
                 }
                 break;
         }
@@ -344,10 +353,6 @@ function getSwissElement(matches, round) {
     const element = document.createElement("div");
     element.className = "group-bracket-wrapper";
     element.classList.add("bracket");
-    const header = document.createElement("div");
-    header.className = "group-header";
-    header.innerText = "Round " + round.toString();
-    element.appendChild(header);
     for (var i = 0; i < matches.length; i++) {
         if (matches[i].roundNumber == round) {
             element.appendChild(getGroupStyleMatchElement(matches[i]));
@@ -400,7 +405,7 @@ function getGroupStyleMatchElement(match) {
     }
     const topName = document.createElement("div");
     topName.className = "team";
-    topName.innerText = match.topName !== undefined ? match.topName : "-";
+    topName.innerText = match.topName !== undefined ? getLimitedName(match.topName) : "-";
     const topScore = document.createElement("div");
     topScore.className = "score";
     topScore.innerText = match.topScore !== undefined ? match.topScore.toString() : "-";
@@ -413,7 +418,7 @@ function getGroupStyleMatchElement(match) {
     }
     const bottomName = document.createElement("div");
     bottomName.className = "team";
-    bottomName.innerText = match.bottomName !== undefined ? match.bottomName : "-";
+    bottomName.innerText = match.bottomName !== undefined ? getLimitedName(match.bottomName) : "-";
     const bottomScore = document.createElement("div");
     bottomScore.className = "score";
     bottomScore.innerText = match.bottomScore !== undefined ? match.bottomScore.toString() : "-";
@@ -423,9 +428,9 @@ function getGroupStyleMatchElement(match) {
     element.appendChild(bottomTeam);
     return element;
 }
-function getLimitedName(name, len = 25) {
+function getLimitedName(name, len = 22) {
     if (name.length > len) {
-        return name.substring(0, len) + "...";
+        return name.substring(0, len).trim() + "...";
     }
     return name;
 }

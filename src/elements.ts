@@ -148,11 +148,6 @@ function getSwissElement(matches: Match[], round: number): HTMLElement {
     element.className = "group-bracket-wrapper";
     element.classList.add("bracket");
 
-    const header = document.createElement("div");
-    header.className = "group-header";
-    header.innerText = "Round " + round.toString();
-    element.appendChild(header);
-
     for (var i = 0; i < matches.length; i++){
         if (matches[i].roundNumber == round){
             element.appendChild(getGroupStyleMatchElement(matches[i]));
@@ -216,7 +211,7 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
     
     const topName = document.createElement("div");
     topName.className = "team";
-    topName.innerText = match.topName !== undefined ? match.topName : "-";
+    topName.innerText = match.topName !== undefined ? getLimitedName(match.topName) : "-";
 
     const topScore = document.createElement("div");
     topScore.className = "score";
@@ -234,7 +229,7 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
 
     const bottomName = document.createElement("div");
     bottomName.className = "team";
-    bottomName.innerText = match.bottomName !== undefined ? match.bottomName : "-";
+    bottomName.innerText = match.bottomName !== undefined ? getLimitedName(match.bottomName) : "-";
 
     const bottomScore = document.createElement("div");
     bottomScore.className = "score";
@@ -249,9 +244,9 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
     return element;
 }
 
-function getLimitedName(name: string, len: number = 25): string{
+function getLimitedName(name: string, len: number = 22): string{
     if (name.length > len){
-        return name.substring(0, len) + "...";    
+        return name.substring(0, len).trim() + "...";    
     }
     return name;
 }

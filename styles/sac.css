@@ -14,9 +14,23 @@ body {
     margin: 0;
 }
 
+#title {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 1920px;
+    height: 60px;
+    font-size: 3em;
+    background: var(--blue);
+    color: white;
+    border-bottom: 4px solid var(--red);
+    z-index: 1;
+}
+
 #bracket-zone{
     width: 1920px;
-    height: 1080px;
+    height: calc(1080px - 60px);
     background: var(--dark-blue);
 }
 
@@ -102,9 +116,9 @@ body {
 
 .group-bracket-wrapper > .group-header {
     color: white;
-    font-size: 1.2em;
+    font-size: 1.5em;
     font-weight: bold;
-    margin-bottom: .1em;
+    margin: .1em 0;
 }
 
 .group-round-wrapper {
@@ -112,8 +126,8 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    margin-bottom: 5px;
+    background-color: var(--blue);
+    margin-bottom: .2em;
     font-size: 1em;
 }
 
@@ -142,13 +156,21 @@ body {
     width: 2.5ch;
     height: fit-content;
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.068);
+    background-color: var(--lighter-blue);
 }
 
 
 .roundrobin-bracket-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
+}
+
+.roundrobin-bracket-wrapper > .title{
+    grid-column: 1 / 3;
+    font-size: 2.5em;
+    font-weight: 600;
+    color: white;
+    text-align: center;
 }
 
 .roundrobin-bracket-wrapper > .group-bracket-wrapper {
@@ -158,7 +180,7 @@ body {
 
 .winner > .team {
     font-weight: 700 !important;
-    text-shadow: 0 0 .6em var(--red);
+    text-shadow: 0 0 .5em var(--red);
 }
 
 .winner > .score {

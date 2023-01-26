@@ -57,6 +57,6 @@ function moveCamera(x: number, y: number, scale: number){
     const camera = document.querySelector("#camera") as HTMLElement;
     const zoom = document.querySelector("#zoom") as HTMLElement;
 
-    camera.style.transform = `translate(${x}px, ${y}px)`
-    zoom.style.transform = `scale(${scale.toString()})`
+    camera.style.transform = `translate(${x}px, ${y}px)`;
+    zoom.style.transform = `scale(${scale.toString()})`;
 }
