@@ -55,7 +55,13 @@ async function updateGraphicURLs(event){
                 urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds-3}`);
             }
             break;
-            
+
+        case "roundrobin":
+        case "swiss":
+            for (let i = 1; i <= numRounds; i++){
+                urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&round=${i}`);
+            }
+            break;
     }
 
     let builder = urls[0];

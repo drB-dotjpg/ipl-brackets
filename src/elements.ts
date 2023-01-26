@@ -167,6 +167,11 @@ function getRoundRobinElement(matches: Match[], round: number): HTMLElement {
     element.className = "roundrobin-bracket-wrapper";
     element.classList.add("bracket");
 
+    const title = document.createElement("div");
+    title.classList.add("title");
+    title.innerText = `Round ${round}`;
+    element.appendChild(title);
+
     const groups = Array.apply(null, Array(matches[matches.length-1].group)).map(function () { return [] });
 
     for (var i = 0; i < matches.length; i++){
@@ -216,7 +221,7 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
     
     const topName = document.createElement("div");
     topName.className = "team";
-    topName.innerText = match.topName !== undefined ? match.topName : "-";
+    topName.innerText = match.topName !== undefined ? getLimitedName(match.topName) : "-";
 
     const topScore = document.createElement("div");
     topScore.className = "score";
@@ -234,7 +239,7 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
 
     const bottomName = document.createElement("div");
     bottomName.className = "team";
-    bottomName.innerText = match.bottomName !== undefined ? match.bottomName : "-";
+    bottomName.innerText = match.bottomName !== undefined ? getLimitedName(match.bottomName) : "-";
 
     const bottomScore = document.createElement("div");
     bottomScore.className = "score";
@@ -249,9 +254,9 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
     return element;
 }
 
-function getLimitedName(name: string, len: number = 25): string{
+function getLimitedName(name: string, len: number = 22): string{
     if (name.length > len){
-        return name.substring(0, len) + "...";    
+        return name.substring(0, len).trim() + "...";    
     }
     return name;
 }

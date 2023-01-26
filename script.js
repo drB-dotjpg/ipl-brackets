@@ -62,6 +62,12 @@ function updateGraphicURLs(event) {
                     urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds - 3}`);
                 }
                 break;
+            case "roundrobin":
+            case "swiss":
+                for (let i = 1; i <= numRounds; i++) {
+                    urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&round=${i}`);
+                }
+                break;
         }
         let builder = urls[0];
         for (let i = 1; i < urls.length; i++) {
@@ -359,6 +365,10 @@ function getRoundRobinElement(matches, round) {
     const element = document.createElement("div");
     element.className = "roundrobin-bracket-wrapper";
     element.classList.add("bracket");
+    const title = document.createElement("div");
+    title.classList.add("title");
+    title.innerText = `Round ${round}`;
+    element.appendChild(title);
     const groups = Array.apply(null, Array(matches[matches.length - 1].group)).map(function () { return []; });
     for (var i = 0; i < matches.length; i++) {
         if (matches[i].roundNumber == round) {
@@ -400,7 +410,7 @@ function getGroupStyleMatchElement(match) {
     }
     const topName = document.createElement("div");
     topName.className = "team";
-    topName.innerText = match.topName !== undefined ? match.topName : "-";
+    topName.innerText = match.topName !== undefined ? getLimitedName(match.topName) : "-";
     const topScore = document.createElement("div");
     topScore.className = "score";
     topScore.innerText = match.topScore !== undefined ? match.topScore.toString() : "-";
@@ -413,7 +423,7 @@ function getGroupStyleMatchElement(match) {
     }
     const bottomName = document.createElement("div");
     bottomName.className = "team";
-    bottomName.innerText = match.bottomName !== undefined ? match.bottomName : "-";
+    bottomName.innerText = match.bottomName !== undefined ? getLimitedName(match.bottomName) : "-";
     const bottomScore = document.createElement("div");
     bottomScore.className = "score";
     bottomScore.innerText = match.bottomScore !== undefined ? match.bottomScore.toString() : "-";
@@ -423,9 +433,9 @@ function getGroupStyleMatchElement(match) {
     element.appendChild(bottomTeam);
     return element;
 }
-function getLimitedName(name, len = 25) {
+function getLimitedName(name, len = 22) {
     if (name.length > len) {
-        return name.substring(0, len) + "...";
+        return name.substring(0, len).trim() + "...";
     }
     return name;
 }
