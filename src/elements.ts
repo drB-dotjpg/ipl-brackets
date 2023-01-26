@@ -1,4 +1,4 @@
-function getDoubleEliminationElement(matches: Match[], minRound: number) : HTMLElement{
+function getDoubleEliminationElement(matches: Match[], minRound: number, focus: string) : HTMLElement{
     const element: HTMLElement = document.createElement("div");
     
     const winnersMatches: Match[] = [];
@@ -18,8 +18,12 @@ function getDoubleEliminationElement(matches: Match[], minRound: number) : HTMLE
     const losersElement: HTMLElement = getEliminationElement(losersMatches, losersMinRound, "losers");
     losersElement.dataset.bracketType = "losers";
 
-    element.appendChild(winnersElement);
-    element.appendChild(losersElement);
+    if (focus != "losers"){
+        element.appendChild(winnersElement);
+    }
+    if (focus != "winners"){
+        element.appendChild(losersElement);
+    }
     
     return element;
 }
@@ -64,7 +68,7 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         const elim = getEliminationStyleMatchElement(matches[i]);
         if (matches[i].roundNumber >= minRound){
             roundElims[matches[i].roundNumber-minRound].appendChild(elim);
-        } else {
+        } else if (matches[i].roundNumber == 0) {
             elim.classList.add("elim-third")
             roundElims[roundElims.length-1].appendChild(elim);
         }

@@ -8,12 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 function pageLoad() {
-    var _a, _b;
+    var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         const urlParams = new URLSearchParams(window.location.search);
         const bracketId = urlParams.get("bracketId");
         const round = (_a = parseInt(urlParams.get("round"))) !== null && _a !== void 0 ? _a : 1;
         const minRound = (_b = urlParams.get("minRound")) !== null && _b !== void 0 ? _b : "1";
+        const focus = (_c = urlParams.get("focus")) !== null && _c !== void 0 ? _c : "none";
         console.log(minRound);
         const battlefyRes = yield getMatchesFromBracketID(bracketId);
         const bracketStyle = battlefyRes.bracketType;
@@ -24,7 +25,7 @@ function pageLoad() {
                 zoom.appendChild(getEliminationElement(matches, parseInt(minRound)));
                 break;
             case "doubleelim":
-                zoom.appendChild(getDoubleEliminationElement(matches, parseInt(minRound)));
+                zoom.appendChild(getDoubleEliminationElement(matches, parseInt(minRound), focus));
                 break;
             case "swiss":
                 zoom.appendChild(getSwissElement(matches, round));
@@ -35,10 +36,43 @@ function pageLoad() {
         centerOnElements();
     });
 }
+function updateGraphicURLs(event) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const outElim = document.getElementById("out");
+        const bracketId = document.getElementById("bracketId").value;
+        const matchesReq = yield getMatchesFromBracketID(bracketId);
+        const bracketType = matchesReq.bracketType;
+        const numRounds = matchesReq.numRounds;
+        console.log(numRounds);
+        const urls = [];
+        switch (bracketType) {
+            case "doubleelim":
+                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}`);
+                urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&focus=winners`);
+                urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&focus=losers`);
+                if (numRounds > 3) {
+                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds - 3}`);
+                }
+                break;
+            case "singleelim":
+                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}`);
+                if (numRounds > 5) {
+                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&minRound=${numRounds - 3}`);
+                }
+                break;
+        }
+        let builder = urls[0];
+        for (let i = 1; i < urls.length; i++) {
+            builder += "\n" + urls[i];
+        }
+        outElim.value = builder;
+    });
+}
 function getMatchesFromBracketID(id) {
     return __awaiter(this, void 0, void 0, function* () {
         var matches = [];
         var bracketType;
+        var numRounds;
         return fetch(`https://api.battlefy.com/stages/${id}`)
             .then((response) => {
             return response.json();
@@ -48,19 +82,23 @@ function getMatchesFromBracketID(id) {
                 if (bracketResponse.bracket.type == "roundrobin") {
                     matches = yield getRoundRobinMatchesFromResponse(bracketResponse);
                     bracketType = bracketResponse.bracket.type;
+                    numRounds = bracketResponse.bracket.teamsCount - 1;
                 }
                 else {
                     matches = yield getElimOrSwissMatches(id);
                     if (bracketResponse.bracket.type == "elimination") {
                         bracketType = bracketResponse.bracket.style == "single" ? "singleelim" : "doubleelim";
+                        numRounds = bracketResponse.bracket.roundsCount;
                     }
                     else {
                         bracketType = bracketResponse.bracket.type;
+                        numRounds = bracketResponse.bracket.series.length;
                     }
                 }
                 return {
                     bracketType: bracketType,
-                    matches: matches
+                    matches: matches,
+                    numRounds: numRounds
                 };
             });
         });
@@ -179,7 +217,7 @@ function moveCamera(x, y, scale) {
     camera.style.transform = `translate(${x}px, ${y}px)`;
     zoom.style.transform = `scale(${scale.toString()})`;
 }
-function getDoubleEliminationElement(matches, minRound) {
+function getDoubleEliminationElement(matches, minRound, focus) {
     const element = document.createElement("div");
     const winnersMatches = [];
     const losersMatches = [];
@@ -196,8 +234,12 @@ function getDoubleEliminationElement(matches, minRound) {
     const losersMinRound = minRound == 1 ? minRound : minRound + 1;
     const losersElement = getEliminationElement(losersMatches, losersMinRound, "losers");
     losersElement.dataset.bracketType = "losers";
-    element.appendChild(winnersElement);
-    element.appendChild(losersElement);
+    if (focus != "losers") {
+        element.appendChild(winnersElement);
+    }
+    if (focus != "winners") {
+        element.appendChild(losersElement);
+    }
     return element;
 }
 function getEliminationElement(matches, minRound, roundNaming) {
@@ -236,7 +278,7 @@ function getEliminationElement(matches, minRound, roundNaming) {
         if (matches[i].roundNumber >= minRound) {
             roundElims[matches[i].roundNumber - minRound].appendChild(elim);
         }
-        else {
+        else if (matches[i].roundNumber == 0) {
             elim.classList.add("elim-third");
             roundElims[roundElims.length - 1].appendChild(elim);
         }
