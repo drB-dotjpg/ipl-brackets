@@ -72,7 +72,7 @@ body {
 .elim-round-wrapper > .team-wrapper > .seed {
     font-weight: 300;
     transform-origin: center;
-    scale: .7;
+    transform: scale(.7);
     opacity: .85;
     min-width: 1.2em;
     text-align: center;
