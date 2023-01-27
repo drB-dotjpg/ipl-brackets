@@ -63,6 +63,14 @@
         .button:not(:first-child){
             margin-left: .5em;
         }
+
+        h3{
+            margin: .5em;
+        }  
+        
+        h3:not(:first-of-type){
+            margin-top: 1.5em;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +90,8 @@
             <div class="button" onclick="updateGraphicURLs('sac')">SAC</div>
         </div>
         <h3>Add the following URLs as browser source scenes in OBS.</h3>
+        <div>Size: 1920x1080</div>
+        <div>These sources do not auto refresh, please refresh the pages in OBS before showing them!</div>
         <textarea id="out" type="text" placeholder="Output URLs" label="Placeholder" disabled style="height: 16em;"></textarea>
     </div>
     <script>
