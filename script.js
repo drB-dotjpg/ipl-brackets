@@ -98,10 +98,16 @@ function getMatchesFromBracketID(id) {
         var numRounds;
         return fetch(`https://api.battlefy.com/stages/${id}`)
             .then((response) => {
+            if (!response.ok) {
+                return null;
+            }
             return response.json();
         })
             .then(function (bracketResponse) {
             return __awaiter(this, void 0, void 0, function* () {
+                if (bracketResponse === null) {
+                    return null;
+                }
                 if (bracketResponse.bracket.type == "roundrobin") {
                     matches = yield getRoundRobinMatchesFromResponse(bracketResponse);
                     bracketType = bracketResponse.bracket.type;
@@ -121,7 +127,8 @@ function getMatchesFromBracketID(id) {
                 return {
                     bracketType: bracketType,
                     matches: matches,
-                    numRounds: numRounds
+                    numRounds: numRounds,
+                    name: bracketResponse.name
                 };
             });
         });

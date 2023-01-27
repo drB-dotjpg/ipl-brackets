@@ -70,7 +70,8 @@
         <h1>IPL Brackets</h1>
         <h3>Enter the bracket URL</h3>
         <input id="bracketUrl" type="text" placeholder="Battlefy Bracket URL">
-        <p><b>How to get bracket:</b> Go to the tournament battlefy, then go to the desired bracket page.
+        <p><b>How to get bracket:</b> Go to the tournament battlefy, then go to the desired bracket page.</p>
+        <div id="error" style="color: lightpink; display: none;"></div>
         <h3>Enter the title of the bracket</h3>
         <input id="bracketTitle" type="text" placeholder="Bracket Title">
         <h3>Choose graphics</h3>
@@ -83,5 +84,25 @@
         <h3>Add the following URLs as browser source scenes in OBS.</h3>
         <textarea id="out" type="text" placeholder="Output URLs" label="Placeholder" disabled style="height: 16em;"></textarea>
     </div>
+    <script>
+        const bracketURL = document.getElementById("bracketUrl");
+        const errorMessage = document.getElementById("error");
+        const title = document.getElementById("bracketTitle");
+        bracketURL.addEventListener('change', async (event) => {
+            const bracketReq = await getMatchesFromBracketID(getID(bracketURL.value))
+            if (bracketReq != null){
+                errorMessage.style.display = "none";
+                title.value = bracketReq.name;
+            } else {
+                if (bracketURL.value != ""){
+                    errorMessage.innerText = "Invald URL! Make sure you've entered a bracket URL.";
+                    errorMessage.style.display = "block";
+                } else {
+                    errorMessage.style.display = "none";
+                }
+                title.value = "";
+            }
+        });
+    </script>
 </body>
 </html>
