@@ -14,7 +14,7 @@ function getDoubleEliminationElement(matches: Match[], minRound: number, focus: 
 
     const winnersElement: HTMLElement = getEliminationElement(winnersMatches, minRound, "winners");
     winnersElement.dataset.bracketType = "winners";
-    const losersMinRound = minRound == 1 ? minRound : minRound + 1;
+    const losersMinRound = minRound == 1 ? minRound : minRound - 1;
     const losersElement: HTMLElement = getEliminationElement(losersMatches, losersMinRound, "losers");
     losersElement.dataset.bracketType = "losers";
 
