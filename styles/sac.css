@@ -97,6 +97,7 @@ body {
 .elim-round-wrapper > .team-wrapper > .team {
     font-weight: 400;
     margin-right: auto;
+    line-height: 100%;
 }
 
 .elim-round-wrapper > .team-wrapper > .score {
