@@ -1,13 +1,20 @@
-async function getMatchesFromBracketID(id: string): Promise<{bracketType, matches, numRounds}> {
+async function getMatchesFromBracketID(id: string): Promise<{bracketType, matches, numRounds, name}> {
     var matches: Match[] = [];
     var bracketType: string;
     var numRounds: number;
 
     return fetch(`https://api.battlefy.com/stages/${id}`)
     .then((response) => {
+        if (!response.ok){
+            return null
+        }
         return response.json();
     })
     .then(async function(bracketResponse) {
+        if (bracketResponse === null){
+            return null;
+        }
+        
         if (bracketResponse.bracket.type == "roundrobin"){
             matches = await getRoundRobinMatchesFromResponse(bracketResponse);
             bracketType = bracketResponse.bracket.type;
@@ -27,7 +34,8 @@ async function getMatchesFromBracketID(id: string): Promise<{bracketType, matche
         return {
             bracketType: bracketType,
             matches: matches,
-            numRounds: numRounds
+            numRounds: numRounds,
+            name : bracketResponse.name
         };
     });
 }

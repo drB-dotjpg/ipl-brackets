@@ -35,8 +35,10 @@ async function pageLoad(){
 
 async function updateGraphicURLs(event){
     const outElim = document.getElementById("out") as HTMLInputElement;
-    const bracketId = (document.getElementById("bracketId") as HTMLInputElement).value;
+    const bracketUrl = (document.getElementById("bracketUrl") as HTMLInputElement).value;
     const bracketTitle = (document.getElementById("bracketTitle") as HTMLInputElement).value;
+
+    const bracketId = getID(bracketUrl);
 
     const matchesReq = await getMatchesFromBracketID(bracketId);
     const bracketType = matchesReq.bracketType;
@@ -74,4 +76,15 @@ async function updateGraphicURLs(event){
         builder += "\n" + urls[i];
     }
     outElim.value = builder;
+}
+
+function getID(search) {
+    if (search.includes("https://battlefy.com/")){
+        const split = search.split("/")
+        if(split[7] !== undefined){
+            return split[7]
+        }
+    } else {
+        return search
+    }
 }

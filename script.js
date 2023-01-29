@@ -43,8 +43,9 @@ function pageLoad() {
 function updateGraphicURLs(event) {
     return __awaiter(this, void 0, void 0, function* () {
         const outElim = document.getElementById("out");
-        const bracketId = document.getElementById("bracketId").value;
+        const bracketUrl = document.getElementById("bracketUrl").value;
         const bracketTitle = document.getElementById("bracketTitle").value;
+        const bracketId = getID(bracketUrl);
         const matchesReq = yield getMatchesFromBracketID(bracketId);
         const bracketType = matchesReq.bracketType;
         const numRounds = matchesReq.numRounds;
@@ -79,6 +80,17 @@ function updateGraphicURLs(event) {
         outElim.value = builder;
     });
 }
+function getID(search) {
+    if (search.includes("https://battlefy.com/")) {
+        const split = search.split("/");
+        if (split[7] !== undefined) {
+            return split[7];
+        }
+    }
+    else {
+        return search;
+    }
+}
 function getMatchesFromBracketID(id) {
     return __awaiter(this, void 0, void 0, function* () {
         var matches = [];
@@ -86,10 +98,16 @@ function getMatchesFromBracketID(id) {
         var numRounds;
         return fetch(`https://api.battlefy.com/stages/${id}`)
             .then((response) => {
+            if (!response.ok) {
+                return null;
+            }
             return response.json();
         })
             .then(function (bracketResponse) {
             return __awaiter(this, void 0, void 0, function* () {
+                if (bracketResponse === null) {
+                    return null;
+                }
                 if (bracketResponse.bracket.type == "roundrobin") {
                     matches = yield getRoundRobinMatchesFromResponse(bracketResponse);
                     bracketType = bracketResponse.bracket.type;
@@ -109,7 +127,8 @@ function getMatchesFromBracketID(id) {
                 return {
                     bracketType: bracketType,
                     matches: matches,
-                    numRounds: numRounds
+                    numRounds: numRounds,
+                    name: bracketResponse.name
                 };
             });
         });
