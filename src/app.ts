@@ -54,8 +54,8 @@ async function autoRefresh(){
             const topScore = topElement.querySelector(".score") as HTMLElement;
             const bottomScore = bottomElement.querySelector(".score") as HTMLElement;
             
-            if (!((match.topName == topName.innerText || match.topName == undefined && topName.innerText == "-")
-                && (match.bottomName == bottomName.innerText || match.bottomName == undefined && bottomName.innerText == "-")
+            if (!((getLimitedName(match.topName) == topName.innerText || match.topName == undefined && topName.innerText == "-")
+                && (getLimitedName(match.bottomName) == bottomName.innerText || match.bottomName == undefined && bottomName.innerText == "-")
                 && (match.topScore == topScore.innerText || match.topScore == undefined && topScore.innerText == "-")
                 && (match.bottomScore == bottomScore.innerText || match.bottomScore == undefined && bottomScore.innerText == "-"))){
 

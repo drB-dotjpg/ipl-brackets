@@ -58,8 +58,8 @@ function autoRefresh() {
                 const bottomSeed = (_b = bottomElement.querySelector(".seed")) !== null && _b !== void 0 ? _b : undefined;
                 const topScore = topElement.querySelector(".score");
                 const bottomScore = bottomElement.querySelector(".score");
-                if (!((match.topName == topName.innerText || match.topName == undefined && topName.innerText == "-")
-                    && (match.bottomName == bottomName.innerText || match.bottomName == undefined && bottomName.innerText == "-")
+                if (!((getLimitedName(match.topName) == topName.innerText || match.topName == undefined && topName.innerText == "-")
+                    && (getLimitedName(match.bottomName) == bottomName.innerText || match.bottomName == undefined && bottomName.innerText == "-")
                     && (match.topScore == topScore.innerText || match.topScore == undefined && topScore.innerText == "-")
                     && (match.bottomScore == bottomScore.innerText || match.bottomScore == undefined && bottomScore.innerText == "-"))) {
                     if (match.topName == topName.innerText && match.bottomName == bottomName.innerText && match.topWinner) {
@@ -329,9 +329,9 @@ function centerOnElements(smooth = false) {
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 320)) * .97;
         if (targetWidth * scale > root.clientWidth) {
-            scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 320)) * .97;
         }
     }
     moveCamera((root.clientWidth - maxWidth * scale - minWidth * scale) / 2, (root.clientHeight - maxHeight * scale - minHeight * scale) / 2, scale, smooth);

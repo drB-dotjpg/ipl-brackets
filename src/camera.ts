@@ -34,10 +34,10 @@ function centerOnElements(smooth: boolean = false){
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 320)) * .97;
         
         if (targetWidth * scale > root.clientWidth){
-            scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 320)) * .97;
         }
     }
 
