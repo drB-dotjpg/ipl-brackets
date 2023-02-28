@@ -218,5 +218,14 @@ div[data-round-status="in-progress"]{
 }
 
 div[data-round-status="not-started"]{
+    background-color: #003366;
+    filter: brightness(.8);
+}
+
+div[data-round-status="not-started"] > *{
     opacity: .35;
+}
+
+div[data-round-status="not-started"].elim-third::before{
+    opacity: .35
 }

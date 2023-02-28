@@ -1,4 +1,6 @@
-function centerOnElements(){
+declare var gsap: any;
+
+function centerOnElements(smooth: boolean = false){
     const root = document.getElementById("bracket-zone");
     const elementsOfInterest = document.querySelectorAll("#zoom > *");
 
@@ -32,17 +34,18 @@ function centerOnElements(){
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 320)) * .97;
         
         if (targetWidth * scale > root.clientWidth){
-            scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 320)) * .97;
         }
     }
 
     moveCamera(
         (root.clientWidth - maxWidth*scale - minWidth*scale ) / 2,
         (root.clientHeight - maxHeight*scale - minHeight*scale) / 2,
-        scale
+        scale,
+        smooth
     );
 }
 
@@ -53,10 +56,23 @@ function getPosOfElement(elim: HTMLElement) : number[][] {
     ];
 }
 
-function moveCamera(x: number, y: number, scale: number){
+function moveCamera(x: number, y: number, scale: number, smooth: boolean){
     const camera = document.querySelector("#camera") as HTMLElement;
     const zoom = document.querySelector("#zoom") as HTMLElement;
 
-    camera.style.transform = `translate(${x}px, ${y}px)`;
-    zoom.style.transform = `scale(${scale.toString()})`;
+    if (!smooth){
+        camera.style.transform = `translate(${x}px, ${y}px)`;
+        zoom.style.transform = `scale(${scale.toString()})`;
+    } else {
+        gsap.to(camera, {
+            duration: 1,
+            ease: "power2.inOut",
+            transform: `translate(${x}px, ${y}px)`
+        });
+        gsap.to(zoom, {
+            duration: 1,
+            ease: "power2.inOut",
+            transform: `scale(${scale.toString()})`
+        });
+    }
 }

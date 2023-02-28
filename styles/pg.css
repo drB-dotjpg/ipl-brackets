@@ -236,5 +236,15 @@ div[data-round-status="in-progress"]{
 }
 
 div[data-round-status="not-started"]{
+    background-color: #FBFBFB44;
+    border-color: #3E009944;
+    box-shadow: -3px 1.5px 0px #3E009944;
+}
+
+div[data-round-status="not-started"] > *{
     opacity: .35;
+}
+
+div[data-round-status="not-started"].elim-third::before{
+    opacity: .35
 }

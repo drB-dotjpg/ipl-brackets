@@ -227,5 +227,6 @@ div[data-round-status="in-progress"]{
 }
 
 div[data-round-status="not-started"]{
-    opacity: .35;
+    background-color: transparent;
+    filter: saturate(.6) brightness(.8);
 }

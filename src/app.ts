@@ -1,3 +1,5 @@
+declare var gsap: any;
+
 async function pageLoad(){
     const urlParams = new URLSearchParams(window.location.search);
     const bracketId = urlParams.get("bracketId");
@@ -5,7 +7,6 @@ async function pageLoad(){
     const minRound = urlParams.get("minRound") ?? "1";
     const focus = urlParams.get("focus") ?? "none";
     const title = urlParams.get("title");
-    console.log(minRound);
 
     const battlefyRes = await getMatchesFromBracketID(bracketId);
     const bracketStyle = battlefyRes.bracketType;
@@ -29,6 +30,110 @@ async function pageLoad(){
     document.getElementById("title").innerText = title;
 
     centerOnElements();
+}
+
+async function autoRefresh(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const bracketId = urlParams.get("bracketId");
+
+    const battlefyRes = await getMatchesFromBracketID(bracketId);
+    const matches = battlefyRes.matches;
+
+    const elements = document.querySelectorAll(".group-round-wrapper, .elim-round-wrapper");
+    for (var i = 0; i < elements.length; i++){
+        const matchId = (elements[i] as HTMLElement).dataset.matchId;
+        const match = matches.find(x => x.id == matchId);
+        if (match) {
+            const element = elements[i] as HTMLElement;
+            const topElement = element.querySelector(".top") as HTMLElement;
+            const bottomElement = element.querySelector(".bottom") as HTMLElement;
+            const topName = topElement.querySelector(".team") as HTMLElement;
+            const bottomName = bottomElement.querySelector(".team") as HTMLElement;
+            const topSeed = topElement.querySelector(".seed") as HTMLElement ?? undefined;
+            const bottomSeed = bottomElement.querySelector(".seed") as HTMLElement ?? undefined;
+            const topScore = topElement.querySelector(".score") as HTMLElement;
+            const bottomScore = bottomElement.querySelector(".score") as HTMLElement;
+            
+            if (!((getLimitedName(match.topName) == topName.innerText || match.topName == undefined && topName.innerText == "-")
+                && (getLimitedName(match.bottomName) == bottomName.innerText || match.bottomName == undefined && bottomName.innerText == "-")
+                && (match.topScore == topScore.innerText || match.topScore == undefined && topScore.innerText == "-")
+                && (match.bottomScore == bottomScore.innerText || match.bottomScore == undefined && bottomScore.innerText == "-"))){
+
+                if (match.topName == topName.innerText && match.bottomName == bottomName.innerText && match.topWinner){
+                    topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();
+                    bottomScore.innerText = match.bottomScore === undefined ? "-" : match.bottomScore.toString();
+                    if (match.topWinner) {
+                        topElement.classList.add("winner");
+                    } else {
+                        topElement.classList.remove("winner");
+                    }
+                    if (match.bottomWinner) {
+                        bottomElement.classList.add("winner");
+                    } else {
+                        bottomElement.classList.remove("winner");
+                    }
+
+                    if (match.topWinner || match.bottomWinner){
+                        element.dataset.roundStatus = "finished";
+                    } else if (match.topName !== undefined && match.bottomName === undefined || match.topName === undefined && match.bottomName !== undefined){
+                        element.dataset.roundStatus = "awaiting";
+                    } else if (match.topName !== undefined || match.bottomName !== undefined){
+                        element.dataset.roundStatus = "in-progress"
+                    } else {
+                        element.dataset.roundStatus = "not-started";
+                    }
+
+                    centerOnElements(true);
+                } else {
+
+                    const tl = gsap.timeline();
+
+                    tl.to(element, {opacity: 0, duration: 1, ease: "power2.in", onComplete: () => {
+
+                        element.style.width = element.offsetWidth + "px";
+    
+                        topName.innerText = match.topName === undefined ? "-" : getLimitedName(match.topName);
+                        bottomName.innerText = match.bottomName === undefined ? "-" : getLimitedName(match.bottomName);
+                        topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();
+                        bottomScore.innerText = match.bottomScore === undefined ? "-" : match.bottomScore.toString();
+
+                        if (topSeed !== undefined && bottomSeed !== undefined){
+                            topSeed.innerText = match.topSeed === undefined ? "-" : match.topSeed.toString();
+                            bottomSeed.innerText = match.bottomSeed === undefined ? "-" : match.bottomSeed.toString();
+                        }
+    
+                        if (match.topWinner || match.bottomWinner){
+                            element.dataset.roundStatus = "finished";
+                        } else if (match.topName !== undefined && match.bottomName === undefined || match.topName === undefined && match.bottomName !== undefined){
+                            element.dataset.roundStatus = "awaiting";
+                        } else if (match.topName !== undefined || match.bottomName !== undefined){
+                            element.dataset.roundStatus = "in-progress"
+                        } else {
+                            element.dataset.roundStatus = "not-started";
+                        }
+    
+                        if (match.topWinner) {
+                            topElement.classList.add("winner");
+                        } else {
+                            topElement.classList.remove("winner");
+                        }
+                        if (match.bottomWinner) {
+                            bottomElement.classList.add("winner");
+                        } else {
+                            bottomElement.classList.remove("winner");
+                        }
+    
+                    }});
+                    tl.to(element, {duration: 1, width: "auto", ease: "power2.inOut"});
+                    tl.to(element, {opacity: 1, duration: 1, ease: "power2.out", onStart: () => {
+                        centerOnElements(true);
+                    }});
+                }
+            } else {
+                centerOnElements();
+            }
+        }
+    }
 }
 
 async function updateGraphicURLs(event){

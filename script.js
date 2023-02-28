@@ -16,7 +16,6 @@ function pageLoad() {
         const minRound = (_b = urlParams.get("minRound")) !== null && _b !== void 0 ? _b : "1";
         const focus = (_c = urlParams.get("focus")) !== null && _c !== void 0 ? _c : "none";
         const title = urlParams.get("title");
-        console.log(minRound);
         const battlefyRes = yield getMatchesFromBracketID(bracketId);
         const bracketStyle = battlefyRes.bracketType;
         const matches = battlefyRes.matches;
@@ -36,6 +35,110 @@ function pageLoad() {
         }
         document.getElementById("title").innerText = title;
         centerOnElements();
+    });
+}
+function autoRefresh() {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bracketId = urlParams.get("bracketId");
+        const battlefyRes = yield getMatchesFromBracketID(bracketId);
+        const matches = battlefyRes.matches;
+        const elements = document.querySelectorAll(".group-round-wrapper, .elim-round-wrapper");
+        for (var i = 0; i < elements.length; i++) {
+            const matchId = elements[i].dataset.matchId;
+            const match = matches.find(x => x.id == matchId);
+            if (match) {
+                const element = elements[i];
+                const topElement = element.querySelector(".top");
+                const bottomElement = element.querySelector(".bottom");
+                const topName = topElement.querySelector(".team");
+                const bottomName = bottomElement.querySelector(".team");
+                const topSeed = (_a = topElement.querySelector(".seed")) !== null && _a !== void 0 ? _a : undefined;
+                const bottomSeed = (_b = bottomElement.querySelector(".seed")) !== null && _b !== void 0 ? _b : undefined;
+                const topScore = topElement.querySelector(".score");
+                const bottomScore = bottomElement.querySelector(".score");
+                if (!((getLimitedName(match.topName) == topName.innerText || match.topName == undefined && topName.innerText == "-")
+                    && (getLimitedName(match.bottomName) == bottomName.innerText || match.bottomName == undefined && bottomName.innerText == "-")
+                    && (match.topScore == topScore.innerText || match.topScore == undefined && topScore.innerText == "-")
+                    && (match.bottomScore == bottomScore.innerText || match.bottomScore == undefined && bottomScore.innerText == "-"))) {
+                    if (match.topName == topName.innerText && match.bottomName == bottomName.innerText && match.topWinner) {
+                        topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();
+                        bottomScore.innerText = match.bottomScore === undefined ? "-" : match.bottomScore.toString();
+                        if (match.topWinner) {
+                            topElement.classList.add("winner");
+                        }
+                        else {
+                            topElement.classList.remove("winner");
+                        }
+                        if (match.bottomWinner) {
+                            bottomElement.classList.add("winner");
+                        }
+                        else {
+                            bottomElement.classList.remove("winner");
+                        }
+                        if (match.topWinner || match.bottomWinner) {
+                            element.dataset.roundStatus = "finished";
+                        }
+                        else if (match.topName !== undefined && match.bottomName === undefined || match.topName === undefined && match.bottomName !== undefined) {
+                            element.dataset.roundStatus = "awaiting";
+                        }
+                        else if (match.topName !== undefined || match.bottomName !== undefined) {
+                            element.dataset.roundStatus = "in-progress";
+                        }
+                        else {
+                            element.dataset.roundStatus = "not-started";
+                        }
+                        centerOnElements(true);
+                    }
+                    else {
+                        const tl = gsap.timeline();
+                        tl.to(element, { opacity: 0, duration: 1, ease: "power2.in", onComplete: () => {
+                                element.style.width = element.offsetWidth + "px";
+                                topName.innerText = match.topName === undefined ? "-" : getLimitedName(match.topName);
+                                bottomName.innerText = match.bottomName === undefined ? "-" : getLimitedName(match.bottomName);
+                                topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();
+                                bottomScore.innerText = match.bottomScore === undefined ? "-" : match.bottomScore.toString();
+                                if (topSeed !== undefined && bottomSeed !== undefined) {
+                                    topSeed.innerText = match.topSeed === undefined ? "-" : match.topSeed.toString();
+                                    bottomSeed.innerText = match.bottomSeed === undefined ? "-" : match.bottomSeed.toString();
+                                }
+                                if (match.topWinner || match.bottomWinner) {
+                                    element.dataset.roundStatus = "finished";
+                                }
+                                else if (match.topName !== undefined && match.bottomName === undefined || match.topName === undefined && match.bottomName !== undefined) {
+                                    element.dataset.roundStatus = "awaiting";
+                                }
+                                else if (match.topName !== undefined || match.bottomName !== undefined) {
+                                    element.dataset.roundStatus = "in-progress";
+                                }
+                                else {
+                                    element.dataset.roundStatus = "not-started";
+                                }
+                                if (match.topWinner) {
+                                    topElement.classList.add("winner");
+                                }
+                                else {
+                                    topElement.classList.remove("winner");
+                                }
+                                if (match.bottomWinner) {
+                                    bottomElement.classList.add("winner");
+                                }
+                                else {
+                                    bottomElement.classList.remove("winner");
+                                }
+                            } });
+                        tl.to(element, { duration: 1, width: "auto", ease: "power2.inOut" });
+                        tl.to(element, { opacity: 1, duration: 1, ease: "power2.out", onStart: () => {
+                                centerOnElements(true);
+                            } });
+                    }
+                }
+                else {
+                    centerOnElements();
+                }
+            }
+        }
     });
 }
 function updateGraphicURLs(event) {
@@ -198,7 +301,7 @@ function getRoundRobinMatchesFromResponse(res) {
         });
     });
 }
-function centerOnElements() {
+function centerOnElements(smooth = false) {
     const root = document.getElementById("bracket-zone");
     const elementsOfInterest = document.querySelectorAll("#zoom > *");
     var maxWidth = 0;
@@ -226,12 +329,12 @@ function centerOnElements() {
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 320)) * .97;
         if (targetWidth * scale > root.clientWidth) {
-            scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 320)) * .97;
         }
     }
-    moveCamera((root.clientWidth - maxWidth * scale - minWidth * scale) / 2, (root.clientHeight - maxHeight * scale - minHeight * scale) / 2, scale);
+    moveCamera((root.clientWidth - maxWidth * scale - minWidth * scale) / 2, (root.clientHeight - maxHeight * scale - minHeight * scale) / 2, scale, smooth);
 }
 function getPosOfElement(elim) {
     return [
@@ -239,11 +342,25 @@ function getPosOfElement(elim) {
         [elim.offsetTop, elim.offsetTop + elim.clientHeight]
     ];
 }
-function moveCamera(x, y, scale) {
+function moveCamera(x, y, scale, smooth) {
     const camera = document.querySelector("#camera");
     const zoom = document.querySelector("#zoom");
-    camera.style.transform = `translate(${x}px, ${y}px)`;
-    zoom.style.transform = `scale(${scale.toString()})`;
+    if (!smooth) {
+        camera.style.transform = `translate(${x}px, ${y}px)`;
+        zoom.style.transform = `scale(${scale.toString()})`;
+    }
+    else {
+        gsap.to(camera, {
+            duration: 1,
+            ease: "power2.inOut",
+            transform: `translate(${x}px, ${y}px)`
+        });
+        gsap.to(zoom, {
+            duration: 1,
+            ease: "power2.inOut",
+            transform: `scale(${scale.toString()})`
+        });
+    }
 }
 function getDoubleEliminationElement(matches, minRound, focus) {
     const element = document.createElement("div");
@@ -330,8 +447,9 @@ function getEliminationStyleMatchElement(match) {
     else {
         element.dataset.roundStatus = "not-started";
     }
+    element.dataset.matchId = match.id;
     const topTeam = document.createElement("div");
-    topTeam.className = "team-wrapper";
+    topTeam.className = "team-wrapper top";
     if (match.topWinner) {
         topTeam.classList.add("winner");
     }
@@ -348,7 +466,7 @@ function getEliminationStyleMatchElement(match) {
     topTeam.appendChild(topName);
     topTeam.appendChild(topScore);
     const bottomTeam = document.createElement("div");
-    bottomTeam.className = "team-wrapper";
+    bottomTeam.className = "team-wrapper bottom";
     if (match.bottomWinner) {
         bottomTeam.classList.add("winner");
     }
@@ -417,8 +535,9 @@ function getGroupStyleMatchElement(match) {
     else {
         element.dataset.roundStatus = "not-started";
     }
+    element.dataset.matchId = match.id;
     const topTeam = document.createElement("div");
-    topTeam.className = "team-wrapper";
+    topTeam.className = "team-wrapper top";
     if (match.topWinner) {
         topTeam.classList.add("winner");
     }
@@ -431,7 +550,7 @@ function getGroupStyleMatchElement(match) {
     topTeam.appendChild(topName);
     topTeam.appendChild(topScore);
     const bottomTeam = document.createElement("div");
-    bottomTeam.className = "team-wrapper";
+    bottomTeam.className = "team-wrapper bottom";
     if (match.bottomWinner) {
         bottomTeam.classList.add("winner");
     }
