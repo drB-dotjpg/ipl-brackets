@@ -251,6 +251,9 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
 }
 
 function getLimitedName(name: string, len: number = 22): string{
+    if (name === undefined){
+        return "-";
+    }
     if (name.length > len){
         return name.substring(0, len).trim() + "...";    
     }

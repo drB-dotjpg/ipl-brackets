@@ -567,6 +567,9 @@ function getGroupStyleMatchElement(match) {
     return element;
 }
 function getLimitedName(name, len = 22) {
+    if (name === undefined) {
+        return "-";
+    }
     if (name.length > len) {
         return name.substring(0, len).trim() + "...";
     }
