@@ -52,6 +52,7 @@ body {
     grid-template-rows: 1.5em auto;
     align-items: center;
     margin: 0 .5em;
+    
 }
 
 .elim-grid-wrapper > .grid-header{

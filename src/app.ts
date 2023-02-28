@@ -28,9 +28,7 @@ async function pageLoad(){
 
     document.getElementById("title").innerText = title;
 
-    setTimeout(() => { //bad code but fixes a bug only happening on OBS
-        centerOnElements();
-    }, 250);
+    centerOnElements();
 }
 
 async function updateGraphicURLs(event){

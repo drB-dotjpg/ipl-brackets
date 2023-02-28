@@ -69,8 +69,10 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         if (matches[i].roundNumber >= minRound){
             roundElims[matches[i].roundNumber-minRound].appendChild(elim);
         } else if (matches[i].roundNumber == 0) {
-            elim.classList.add("elim-third")
-            roundElims[roundElims.length-1].appendChild(elim);
+            elim.classList.add("elim-third");
+            const roundElim = roundElims[roundElims.length-1];
+            roundElim.appendChild(elim);
+            roundElim.style.minHeight = "12em";
         }
     }
 

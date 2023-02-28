@@ -35,9 +35,7 @@ function pageLoad() {
                 zoom.appendChild(getRoundRobinElement(matches, round));
         }
         document.getElementById("title").innerText = title;
-        setTimeout(() => {
-            centerOnElements();
-        }, 250);
+        centerOnElements();
     });
 }
 function updateGraphicURLs(event) {
@@ -310,7 +308,9 @@ function getEliminationElement(matches, minRound, roundNaming) {
         }
         else if (matches[i].roundNumber == 0) {
             elim.classList.add("elim-third");
-            roundElims[roundElims.length - 1].appendChild(elim);
+            const roundElim = roundElims[roundElims.length - 1];
+            roundElim.appendChild(elim);
+            roundElim.style.minHeight = "12em";
         }
     }
     return element;
