@@ -209,7 +209,7 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
     element.dataset.matchId = match.id;
 
     const topTeam = document.createElement("div");
-    topTeam.className = "team-wrapper";
+    topTeam.className = "team-wrapper top";
 
     if (match.topWinner){
         topTeam.classList.add("winner");
@@ -227,7 +227,7 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
     topTeam.appendChild(topScore);
 
     const bottomTeam = document.createElement("div");
-    bottomTeam.className = "team-wrapper";
+    bottomTeam.className = "team-wrapper bottom";
 
     if (match.bottomWinner) {
         bottomTeam.classList.add("winner");

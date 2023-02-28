@@ -203,6 +203,11 @@ body {
     font-weight: 700 !important;
 }
 
+.winner > .score {
+    background: linear-gradient(90deg, var(--seafoam) -50%, var(--off-white) 150%);
+    font-weight: 700 !important;
+}
+
 .elim-third{
     position: absolute;
     align-self: flex-end;
@@ -231,6 +236,16 @@ div[data-round-status="in-progress"]{
     }
 }
 
+
 div[data-round-status="not-started"]{
+    background: linear-gradient(180deg, #4D6C7277 -100%, #191A3477 100%);
+    border-color: #33556344;
+}
+
+div[data-round-status="not-started"] > *{
     opacity: .35;
+}
+
+div[data-round-status="not-started"].elim-third::before{
+    opacity: .35
 }

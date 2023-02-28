@@ -39,8 +39,6 @@ async function autoRefresh(){
     const battlefyRes = await getMatchesFromBracketID(bracketId);
     const matches = battlefyRes.matches;
 
-    const tl = gsap.timeline();
-
     const elements = document.querySelectorAll(".group-round-wrapper, .elim-round-wrapper");
     for (var i = 0; i < elements.length; i++){
         const matchId = (elements[i] as HTMLElement).dataset.matchId;
@@ -51,42 +49,19 @@ async function autoRefresh(){
             const bottomElement = element.querySelector(".bottom") as HTMLElement;
             const topName = topElement.querySelector(".team") as HTMLElement;
             const bottomName = bottomElement.querySelector(".team") as HTMLElement;
-            const topSeed = topElement.querySelector(".seed") as HTMLElement;
-            const bottomSeed = bottomElement.querySelector(".seed") as HTMLElement;
+            const topSeed = topElement.querySelector(".seed") as HTMLElement ?? undefined;
+            const bottomSeed = bottomElement.querySelector(".seed") as HTMLElement ?? undefined;
             const topScore = topElement.querySelector(".score") as HTMLElement;
             const bottomScore = bottomElement.querySelector(".score") as HTMLElement;
-
-            console.log(element, match);
             
             if (!((match.topName == topName.innerText || match.topName == undefined && topName.innerText == "-")
                 && (match.bottomName == bottomName.innerText || match.bottomName == undefined && bottomName.innerText == "-")
-                && (match.topSeed == topSeed.innerText || match.topSeed == undefined && topSeed.innerText == "-")
-                && (match.bottomSeed == bottomSeed.innerText || match.bottomSeed == undefined && bottomSeed.innerText == "-")
                 && (match.topScore == topScore.innerText || match.topScore == undefined && topScore.innerText == "-")
                 && (match.bottomScore == bottomScore.innerText || match.bottomScore == undefined && bottomScore.innerText == "-"))){
-                    
-                const miniTl = gsap.timeline();
-                tl.to(element, {opacity: 0, duration: 1, ease: "power2.in", onComplete: () => {
 
-                    element.style.width = element.offsetWidth + "px";
-
-                    topName.innerText = match.topName === undefined ? "-" : match.topName;
-                    bottomName.innerText = match.bottomName === undefined ? "-" : match.bottomName;
-                    topSeed.innerText = match.topseed === undefined ? "-" : match.topseed.toString();
-                    bottomSeed.innerText = match.bottomseed === undefined ? "-" : match.bottomseed.toString();
+                if (match.topName == topName.innerText && match.bottomName == bottomName.innerText && match.topWinner){
                     topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();
                     bottomScore.innerText = match.bottomScore === undefined ? "-" : match.bottomScore.toString();
-
-                    if (match.topWinner || match.bottomWinner){
-                        element.dataset.roundStatus = "finished";
-                    } else if (match.topName !== undefined && match.bottomName === undefined || match.topName === undefined && match.bottomName !== undefined){
-                        element.dataset.roundStatus = "awaiting";
-                    } else if (match.topName !== undefined || match.bottomName !== undefined){
-                        element.dataset.roundStatus = "in-progress"
-                    } else {
-                        element.dataset.roundStatus = "not-started";
-                    }
-
                     if (match.topWinner) {
                         topElement.classList.add("winner");
                     } else {
@@ -98,12 +73,64 @@ async function autoRefresh(){
                         bottomElement.classList.remove("winner");
                     }
 
-                }});
-                tl.to(element, {duration: 1, width: "auto", ease: "power2.inOut"});
-                tl.to(element, {opacity: 1, duration: 1, ease: "power2.out", onStart: () => {
-                    centerOnElements(true);
-                }});
+                    if (match.topWinner || match.bottomWinner){
+                        element.dataset.roundStatus = "finished";
+                    } else if (match.topName !== undefined && match.bottomName === undefined || match.topName === undefined && match.bottomName !== undefined){
+                        element.dataset.roundStatus = "awaiting";
+                    } else if (match.topName !== undefined || match.bottomName !== undefined){
+                        element.dataset.roundStatus = "in-progress"
+                    } else {
+                        element.dataset.roundStatus = "not-started";
+                    }
 
+                    centerOnElements(true);
+                } else {
+
+                    const tl = gsap.timeline();
+
+                    tl.to(element, {opacity: 0, duration: 1, ease: "power2.in", onComplete: () => {
+
+                        element.style.width = element.offsetWidth + "px";
+    
+                        topName.innerText = match.topName === undefined ? "-" : getLimitedName(match.topName);
+                        bottomName.innerText = match.bottomName === undefined ? "-" : getLimitedName(match.bottomName);
+                        topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();
+                        bottomScore.innerText = match.bottomScore === undefined ? "-" : match.bottomScore.toString();
+
+                        if (topSeed !== undefined && bottomSeed !== undefined){
+                            topSeed.innerText = match.topSeed === undefined ? "-" : match.topSeed.toString();
+                            bottomSeed.innerText = match.bottomSeed === undefined ? "-" : match.bottomSeed.toString();
+                        }
+    
+                        if (match.topWinner || match.bottomWinner){
+                            element.dataset.roundStatus = "finished";
+                        } else if (match.topName !== undefined && match.bottomName === undefined || match.topName === undefined && match.bottomName !== undefined){
+                            element.dataset.roundStatus = "awaiting";
+                        } else if (match.topName !== undefined || match.bottomName !== undefined){
+                            element.dataset.roundStatus = "in-progress"
+                        } else {
+                            element.dataset.roundStatus = "not-started";
+                        }
+    
+                        if (match.topWinner) {
+                            topElement.classList.add("winner");
+                        } else {
+                            topElement.classList.remove("winner");
+                        }
+                        if (match.bottomWinner) {
+                            bottomElement.classList.add("winner");
+                        } else {
+                            bottomElement.classList.remove("winner");
+                        }
+    
+                    }});
+                    tl.to(element, {duration: 1, width: "auto", ease: "power2.inOut"});
+                    tl.to(element, {opacity: 1, duration: 1, ease: "power2.out", onStart: () => {
+                        centerOnElements(true);
+                    }});
+                }
+            } else {
+                centerOnElements();
             }
         }
     }
