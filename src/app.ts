@@ -7,6 +7,7 @@ async function pageLoad(){
     const minRound = urlParams.get("minRound") ?? "1";
     const focus = urlParams.get("focus") ?? "none";
     const title = urlParams.get("title");
+    const refresh = parseInt(urlParams.get("refresh"));
 
     const battlefyRes = await getMatchesFromBracketID(bracketId);
     const bracketStyle = battlefyRes.bracketType;
@@ -30,6 +31,24 @@ async function pageLoad(){
     document.getElementById("title").innerText = title;
 
     centerOnElements();
+
+    if (!Number.isNaN(refresh) && refresh != 0){
+        setInterval(function () {
+            console.log("Refreshing...");
+            autoRefresh();
+        }, refresh * 1000);
+    }
+    
+    console.log("Graphic Data: ", {
+        bracketId,
+        bracketStyle,
+        matches,
+        round,
+        minRound,
+        focus,
+        title,
+        refresh
+    })
 }
 
 async function autoRefresh(){
@@ -140,6 +159,7 @@ async function updateGraphicURLs(event){
     const outElim = document.getElementById("out") as HTMLInputElement;
     const bracketUrl = (document.getElementById("bracketUrl") as HTMLInputElement).value;
     const bracketTitle = (document.getElementById("bracketTitle") as HTMLInputElement).value;
+    const refreshFreq = (document.getElementById("refreshFreq") as HTMLInputElement).value;
 
     const bracketId = getID(bracketUrl);
 
@@ -151,25 +171,25 @@ async function updateGraphicURLs(event){
 
     switch (bracketType){
         case "doubleelim":
-            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
-            urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Winners`)}&focus=winners`);
-            urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Losers`)}&focus=losers`);
+            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}&refresh=${refreshFreq}`);
+            urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Winners`)}&refresh=${refreshFreq}&focus=winners`);
+            urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Losers`)}&refresh=${refreshFreq}&focus=losers`);
             if (numRounds > 4){
-                urls.push(`Top 24:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 24`)}&minRound=${numRounds-2}`);
+                urls.push(`Top 24:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 24`)}&minRound=${numRounds-2}&refresh=${refreshFreq}`);
             }
             break;
         
         case "singleelim":
-            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
+            urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}&refresh=${refreshFreq}`);
             if (numRounds > 5){
-                urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds-3}`);
+                urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds-3}&refresh=${refreshFreq}`);
             }
             break;
 
         case "roundrobin":
         case "swiss":
             for (let i = 1; i <= numRounds; i++){
-                urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Round ${i}`)}&round=${i}`);
+                urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Round ${i}`)}&round=${i}&refresh=${refreshFreq}`);
             }
             break;
     }

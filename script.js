@@ -16,6 +16,7 @@ function pageLoad() {
         const minRound = (_b = urlParams.get("minRound")) !== null && _b !== void 0 ? _b : "1";
         const focus = (_c = urlParams.get("focus")) !== null && _c !== void 0 ? _c : "none";
         const title = urlParams.get("title");
+        const refresh = parseInt(urlParams.get("refresh"));
         const battlefyRes = yield getMatchesFromBracketID(bracketId);
         const bracketStyle = battlefyRes.bracketType;
         const matches = battlefyRes.matches;
@@ -35,6 +36,22 @@ function pageLoad() {
         }
         document.getElementById("title").innerText = title;
         centerOnElements();
+        if (!Number.isNaN(refresh) && refresh != 0) {
+            setInterval(function () {
+                console.log("Refreshing...");
+                autoRefresh();
+            }, refresh * 1000);
+        }
+        console.log("Graphic Data: ", {
+            bracketId,
+            bracketStyle,
+            matches,
+            round,
+            minRound,
+            focus,
+            title,
+            refresh
+        });
     });
 }
 function autoRefresh() {
@@ -146,6 +163,7 @@ function updateGraphicURLs(event) {
         const outElim = document.getElementById("out");
         const bracketUrl = document.getElementById("bracketUrl").value;
         const bracketTitle = document.getElementById("bracketTitle").value;
+        const refreshFreq = document.getElementById("refreshFreq").value;
         const bracketId = getID(bracketUrl);
         const matchesReq = yield getMatchesFromBracketID(bracketId);
         const bracketType = matchesReq.bracketType;
@@ -154,23 +172,23 @@ function updateGraphicURLs(event) {
         const urls = [];
         switch (bracketType) {
             case "doubleelim":
-                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
-                urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Winners`)}&focus=winners`);
-                urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Losers`)}&focus=losers`);
+                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}&refresh=${refreshFreq}`);
+                urls.push(`Winners only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Winners`)}&refresh=${refreshFreq}&focus=winners`);
+                urls.push(`Losers only:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Losers`)}&refresh=${refreshFreq}&focus=losers`);
                 if (numRounds > 4) {
-                    urls.push(`Top 24:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 24`)}&minRound=${numRounds - 2}`);
+                    urls.push(`Top 24:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 24`)}&minRound=${numRounds - 2}&refresh=${refreshFreq}`);
                 }
                 break;
             case "singleelim":
-                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}`);
+                urls.push(`Entire Bracket:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(bracketTitle)}&refresh=${refreshFreq}`);
                 if (numRounds > 5) {
-                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds - 3}`);
+                    urls.push(`Top 16:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Top 16`)}&minRound=${numRounds - 3}&refresh=${refreshFreq}`);
                 }
                 break;
             case "roundrobin":
             case "swiss":
                 for (let i = 1; i <= numRounds; i++) {
-                    urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Round ${i}`)}&round=${i}`);
+                    urls.push(`Round ${i}:\n${window.location.href}graphics/${event}.html?bracketId=${bracketId}&title=${encodeURIComponent(`${bracketTitle} - Round ${i}`)}&round=${i}&refresh=${refreshFreq}`);
                 }
                 break;
         }
@@ -417,7 +435,6 @@ function getEliminationElement(matches, minRound, roundNaming) {
         roundElims.push(roundElim);
         element.appendChild(roundElim);
     }
-    console.log(roundElims, matches);
     for (var i = 0; i < matches.length; i++) {
         const elim = getEliminationStyleMatchElement(matches[i]);
         if (matches[i].roundNumber >= minRound) {
