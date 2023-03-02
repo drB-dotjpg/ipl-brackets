@@ -69,7 +69,6 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         element.appendChild(roundElim);
     }
 
-    console.log(roundElims, matches)
     for (var i = 0; i < matches.length; i++){
         const elim = getEliminationStyleMatchElement(matches[i]);
         if (matches[i].roundNumber >= minRound){
@@ -257,6 +256,9 @@ function getGroupStyleMatchElement(match: Match): HTMLElement {
 }
 
 function getLimitedName(name: string, len: number = 22): string{
+    if (name === undefined){
+        return "-";
+    }
     if (name.length > len){
         return name.substring(0, len).trim() + "...";    
     }
