@@ -411,6 +411,10 @@ function getEliminationElement(matches, minRound, roundNaming) {
     element.classList.add("bracket");
     const roundElims = [];
     const roundsNum = Math.max(...matches.map(o => o.roundNumber));
+    if (minRound <= 0) {
+        minRound = 1;
+    }
+    console.log(minRound);
     for (var i = minRound - 1; i < roundsNum; i++) {
         const roundElim = document.createElement("div");
         roundElim.className = "elim-grid-wrapper";
