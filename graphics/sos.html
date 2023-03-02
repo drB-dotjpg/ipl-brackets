@@ -15,15 +15,13 @@
             <div id="zoom" style="transform-origin: top left; transform: scale(0,0);"></div>
         </div>
     </div>
-    <script>
+    <div style="font-family: 'Dosis'; opacity: 0;">Font preload</div>
+    <script defer>
         window.addEventListener('load', function () {
-            pageLoad()
+            pageLoad().then(() => {
+                centerOnElements();
+            })
         });
-
-        setTimeout(function () {
-            centerOnElements();
-            window.status = "ready";
-        }, 500);
     </script>
 </body>
 </html>

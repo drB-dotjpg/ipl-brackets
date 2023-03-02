@@ -35,7 +35,6 @@ function pageLoad() {
                 zoom.appendChild(getRoundRobinElement(matches, round));
         }
         document.getElementById("title").innerText = title;
-        centerOnElements();
         if (!Number.isNaN(refresh) && refresh != 0) {
             setInterval(function () {
                 console.log("Refreshing...");
@@ -329,6 +328,7 @@ function centerOnElements(smooth = false) {
     for (var i = 0; i < elementsOfInterest.length; i++) {
         const elim = elementsOfInterest[i];
         const pos = getPosOfElement(elim);
+        console.log(pos);
         if (elim.classList.contains("elim-third")) {
             console.log(pos);
         }
