@@ -41,6 +41,7 @@ function pageLoad() {
                 autoRefresh();
             }, refresh * 1000);
         }
+        centerOnElements();
         console.log("Graphic Data: ", {
             bracketId,
             bracketStyle,
