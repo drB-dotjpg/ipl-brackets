@@ -35,7 +35,6 @@ function pageLoad() {
                 zoom.appendChild(getRoundRobinElement(matches, round));
         }
         document.getElementById("title").innerText = title;
-        centerOnElements();
         if (!Number.isNaN(refresh) && refresh != 0) {
             setInterval(function () {
                 console.log("Refreshing...");
@@ -332,6 +331,7 @@ function centerOnElements(smooth = false) {
     for (var i = 0; i < elementsOfInterest.length; i++) {
         const elim = elementsOfInterest[i];
         const pos = getPosOfElement(elim);
+        console.log(pos);
         if (elim.classList.contains("elim-third")) {
             console.log(pos);
         }
@@ -414,6 +414,10 @@ function getEliminationElement(matches, minRound, roundNaming) {
     element.classList.add("bracket");
     const roundElims = [];
     const roundsNum = Math.max(...matches.map(o => o.roundNumber));
+    if (minRound <= 0) {
+        minRound = 1;
+    }
+    console.log(minRound);
     for (var i = minRound - 1; i < roundsNum; i++) {
         const roundElim = document.createElement("div");
         roundElim.className = "elim-grid-wrapper";

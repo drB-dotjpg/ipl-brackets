@@ -12,6 +12,7 @@ function centerOnElements(smooth: boolean = false){
     for (var i = 0; i < elementsOfInterest.length; i++){
         const elim = elementsOfInterest[i] as HTMLElement;
         const pos = getPosOfElement(elim);
+        console.log(pos);
         if (elim.classList.contains("elim-third")){
             console.log(pos);
         }

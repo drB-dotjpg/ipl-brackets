@@ -12,8 +12,9 @@ async function pageLoad(){
     const battlefyRes = await getMatchesFromBracketID(bracketId);
     const bracketStyle = battlefyRes.bracketType;
     const matches = battlefyRes.matches;
-    
+
     const zoom = document.getElementById("zoom");
+
     switch(bracketStyle){
         case "singleelim":
             zoom.appendChild(getEliminationElement(matches, parseInt(minRound)));
@@ -29,8 +30,6 @@ async function pageLoad(){
     }
 
     document.getElementById("title").innerText = title;
-
-    centerOnElements();
 
     if (!Number.isNaN(refresh) && refresh != 0){
         setInterval(function () {
