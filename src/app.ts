@@ -78,7 +78,8 @@ async function autoRefresh(){
                 && (match.topScore == topScore.innerText || match.topScore == undefined && topScore.innerText == "-")
                 && (match.bottomScore == bottomScore.innerText || match.bottomScore == undefined && bottomScore.innerText == "-"))){
 
-                if (match.topName == topName.innerText && match.bottomName == bottomName.innerText && match.topWinner){
+                if (getLimitedName(match.topName) == topName.innerText && getLimitedName(match.bottomName) == bottomName.innerText){
+                    
                     topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();
                     bottomScore.innerText = match.bottomScore === undefined ? "-" : match.bottomScore.toString();
                     if (match.topWinner) {
@@ -109,8 +110,11 @@ async function autoRefresh(){
 
                     tl.to(element, {opacity: 0, duration: 1, ease: "power2.in", onComplete: () => {
 
-                        element.style.width = element.offsetWidth + "px";
-    
+                        const domRect = element.getBoundingClientRect();
+                        const scale = parseFloat((document.querySelector("#zoom") as HTMLElement).style.transform.replace("scale(", "").replace(")", ""));
+                        console.log(element, domRect.width, scale, domRect.width / scale);
+                        element.style.width = `${domRect.width / scale}px`;
+
                         topName.innerText = match.topName === undefined ? "-" : getLimitedName(match.topName);
                         bottomName.innerText = match.bottomName === undefined ? "-" : getLimitedName(match.bottomName);
                         topScore.innerText = match.topScore === undefined ? "-" : match.topScore.toString();

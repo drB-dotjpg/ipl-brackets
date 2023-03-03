@@ -230,7 +230,7 @@ div[data-round-status="in-progress"]{
         background: var(--dark-blue);
     }
     50% {
-        background: var(--blue-grey);
+        background: #384f53;
     }
     100% {
         background: var(--dark-blue);
