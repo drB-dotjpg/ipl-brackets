@@ -357,10 +357,6 @@ function centerOnElements(smooth = false) {
     for (var i = 0; i < elementsOfInterest.length; i++) {
         const elim = elementsOfInterest[i];
         const pos = getPosOfElement(elim);
-        console.log(pos);
-        if (elim.classList.contains("elim-third")) {
-            console.log(pos);
-        }
         maxWidth = Math.max(...pos[0], maxWidth);
         minWidth = Math.min(...pos[0], minWidth);
         maxHeight = Math.max(...pos[1], maxHeight);
@@ -443,7 +439,6 @@ function getEliminationElement(matches, minRound, roundNaming) {
     if (minRound <= 0) {
         minRound = 1;
     }
-    console.log(minRound);
     for (var i = minRound - 1; i < roundsNum; i++) {
         const roundElim = document.createElement("div");
         roundElim.className = "elim-grid-wrapper";

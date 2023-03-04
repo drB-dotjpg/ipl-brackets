@@ -40,8 +40,6 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         minRound = 1;
     }
 
-    console.log(minRound);
-
     for (var i = minRound-1; i < roundsNum; i++){
         const roundElim = document.createElement("div");
         roundElim.className = "elim-grid-wrapper";
