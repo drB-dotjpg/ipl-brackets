@@ -59,7 +59,6 @@ function pageLoad() {
                     const speed = Math.min(1.1 / animElements.length, .2);
                     for (var i = 0; i < animElements.length; i++) {
                         if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")) {
-                            console.log("animating", animElements[i]);
                             transitionTl.fromTo(animElements[i], { scale: .9, opacity: 0 }, { scale: 1, duration: .85, opacity: 1, ease: "power3.out" }, `<+=${speed}`);
                         }
                         else {
@@ -500,6 +499,14 @@ function getEliminationElement(matches, minRound, roundNaming) {
             const roundElim = roundElims[roundElims.length - 1];
             roundElim.appendChild(elim);
             roundElim.style.minHeight = "12em";
+            elim.style.transformOrigin = "bottom left";
+            if (roundElims[0].childNodes.length < 8) {
+                elim.style.marginLeft = "5px";
+                elim.style.scale = "0.7";
+            }
+            else if (roundElims[0].childNodes.length < 16) {
+                elim.style.scale = ".8";
+            }
         }
     }
     for (var i = 0; i < matches.length; i++) {

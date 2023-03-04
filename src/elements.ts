@@ -94,6 +94,14 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
             const roundElim = roundElims[roundElims.length-1];
             roundElim.appendChild(elim);
             roundElim.style.minHeight = "12em";
+
+            elim.style.transformOrigin = "bottom left";
+            if (roundElims[0].childNodes.length < 8){
+                elim.style.marginLeft = "5px";
+                elim.style.scale = "0.7";
+            } else if (roundElims[0].childNodes.length < 16){
+                elim.style.scale = ".8";
+            }
         }
     }
 
