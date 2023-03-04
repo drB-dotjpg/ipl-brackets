@@ -52,20 +52,36 @@ async function pageLoad(){
         
         const animElements = document.querySelectorAll(bracketStyle != "swiss" ? ".group-bracket-wrapper, .elim-grid-wrapper" : ".group-round-wrapper");
         transitionTl.clear();
+        const connectorTl = gsap.timeline();
+
         if (event.detail.active){
             transitionTl.set({}, {}, "+=.35");
+            connectorTl.set({}, {}, "+=.85");
+
             const speed = Math.min(1.1 / animElements.length, .2);
             for (var i = 0; i < animElements.length; i++){
                 if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")){
                     transitionTl.fromTo(animElements[i], {scale: .9, opacity: 0}, {scale: 1, duration: .85, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
                 } else {
-                    gsap.fromTo(animElements[i], {opacity: 0, scale: 1}, {duration: .35, delay: 1 + (i * .02), opacity: 1, ease: "power3.out"});
+                    if (animElements[i].classList.contains("hor-connector")){
+                        connectorTl.fromTo(animElements[i].children, {scale: 1, width: "0"}, {width: "15px", duration: .25, ease: "power3.in"}, `<-=.025`);
+                    } else if (animElements[i].classList.contains("vert-connector")) {
+                        connectorTl.fromTo(animElements[i].children, {scale: 1, height: "0%"}, {height: "100%", duration: .45, ease: "power3.out"}, ">");
+                    }
                 }
             }
         } else {
             for (var i = 0; i < animElements.length; i++){
-                (animElements[i] as HTMLElement).style.opacity = "0";
-                (animElements[i] as HTMLElement).style.transform = "scale(.9)";
+                if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")){
+                    (animElements[i] as HTMLElement).style.opacity = "0";
+                    (animElements[i] as HTMLElement).style.transform = "scale(.9)";
+                } else {
+                    if (animElements[i].classList.contains("hor-connector")){
+                        gsap.to(animElements[i].children, {width: "0", duration: 0});
+                    } else if (animElements[i].classList.contains("vert-connector")) {
+                        gsap.to(animElements[i].children, {height: "0%", duration: 0});
+                    }
+                }
             }
         }
     });

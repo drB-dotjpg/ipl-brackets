@@ -71,6 +71,7 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         if (i < roundsNum - 1){
             const horConnector = document.createElement("div");
             horConnector.className = "elim-grid-wrapper hor-connector";
+            horConnector.style.width = "15px";
             const connectorHeader = document.createElement("div");
             connectorHeader.className = "grid-header";
             horConnector.appendChild(connectorHeader);
@@ -80,6 +81,7 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
             const vertConnector = horConnector.cloneNode(true) as HTMLElement;
             vertConnector.classList.remove("hor-connector");
             vertConnector.classList.add("vert-connector");
+            vertConnector.style.width = "";
             vertConnectorElims.push(vertConnector);
             element.appendChild(vertConnector);
         }
@@ -108,7 +110,6 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
     for (var i = 0; i < matches.length; i++){
         if (matches[i].roundNumber >= minRound && matches[i].roundNumber < roundsNum && matches[i].roundNumber != 0) {
             const horConnector = document.createElement("div");
-            horConnector.style.width = "15px";
             horConnector.style.height = "1px";
             horConnector.style.background = "var(--connector-color)";
             horConnectorElims[matches[i].roundNumber-minRound].appendChild(horConnector);
@@ -117,7 +118,6 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
                 && getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber-minRound]) != getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber-minRound + 1])){
                 const vertConnector = document.createElement("div");
                 vertConnector.style.width = "1px";
-                vertConnector.style.height = "100%";
                 if (i % 2 == 1){
                     vertConnector.style.background = "linear-gradient(0deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
                 } else {

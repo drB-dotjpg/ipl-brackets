@@ -54,22 +54,39 @@ function pageLoad() {
                 }
                 const animElements = document.querySelectorAll(bracketStyle != "swiss" ? ".group-bracket-wrapper, .elim-grid-wrapper" : ".group-round-wrapper");
                 transitionTl.clear();
+                const connectorTl = gsap.timeline();
                 if (event.detail.active) {
                     transitionTl.set({}, {}, "+=.35");
+                    connectorTl.set({}, {}, "+=.85");
                     const speed = Math.min(1.1 / animElements.length, .2);
                     for (var i = 0; i < animElements.length; i++) {
                         if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")) {
                             transitionTl.fromTo(animElements[i], { scale: .9, opacity: 0 }, { scale: 1, duration: .85, opacity: 1, ease: "power3.out" }, `<+=${speed}`);
                         }
                         else {
-                            gsap.fromTo(animElements[i], { opacity: 0, scale: 1 }, { duration: .35, delay: 1 + (i * .02), opacity: 1, ease: "power3.out" });
+                            if (animElements[i].classList.contains("hor-connector")) {
+                                connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "15px", duration: .25, ease: "power3.in" }, `<-=.025`);
+                            }
+                            else if (animElements[i].classList.contains("vert-connector")) {
+                                connectorTl.fromTo(animElements[i].children, { scale: 1, height: "0%" }, { height: "100%", duration: .45, ease: "power3.out" }, ">");
+                            }
                         }
                     }
                 }
                 else {
                     for (var i = 0; i < animElements.length; i++) {
-                        animElements[i].style.opacity = "0";
-                        animElements[i].style.transform = "scale(.9)";
+                        if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")) {
+                            animElements[i].style.opacity = "0";
+                            animElements[i].style.transform = "scale(.9)";
+                        }
+                        else {
+                            if (animElements[i].classList.contains("hor-connector")) {
+                                gsap.to(animElements[i].children, { width: "0", duration: 0 });
+                            }
+                            else if (animElements[i].classList.contains("vert-connector")) {
+                                gsap.to(animElements[i].children, { height: "0%", duration: 0 });
+                            }
+                        }
                     }
                 }
             });
@@ -477,6 +494,7 @@ function getEliminationElement(matches, minRound, roundNaming) {
         if (i < roundsNum - 1) {
             const horConnector = document.createElement("div");
             horConnector.className = "elim-grid-wrapper hor-connector";
+            horConnector.style.width = "15px";
             const connectorHeader = document.createElement("div");
             connectorHeader.className = "grid-header";
             horConnector.appendChild(connectorHeader);
@@ -485,6 +503,7 @@ function getEliminationElement(matches, minRound, roundNaming) {
             const vertConnector = horConnector.cloneNode(true);
             vertConnector.classList.remove("hor-connector");
             vertConnector.classList.add("vert-connector");
+            vertConnector.style.width = "";
             vertConnectorElims.push(vertConnector);
             element.appendChild(vertConnector);
         }
@@ -512,7 +531,6 @@ function getEliminationElement(matches, minRound, roundNaming) {
     for (var i = 0; i < matches.length; i++) {
         if (matches[i].roundNumber >= minRound && matches[i].roundNumber < roundsNum && matches[i].roundNumber != 0) {
             const horConnector = document.createElement("div");
-            horConnector.style.width = "15px";
             horConnector.style.height = "1px";
             horConnector.style.background = "var(--connector-color)";
             horConnectorElims[matches[i].roundNumber - minRound].appendChild(horConnector);
@@ -520,7 +538,6 @@ function getEliminationElement(matches, minRound, roundNaming) {
                 && getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber - minRound]) != getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber - minRound + 1])) {
                 const vertConnector = document.createElement("div");
                 vertConnector.style.width = "1px";
-                vertConnector.style.height = "100%";
                 if (i % 2 == 1) {
                     vertConnector.style.background = "linear-gradient(0deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
                 }
