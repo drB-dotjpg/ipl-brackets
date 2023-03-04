@@ -46,7 +46,7 @@ function pageLoad() {
         window.addEventListener('obsSourceActiveChanged', function (event) {
             return __awaiter(this, void 0, void 0, function* () {
                 console.log("OBS Source Active Changed: ", event.detail.active);
-                const animElements = document.querySelectorAll(".group-bracket-wrapper, .elim-grid-wrapper");
+                const animElements = document.querySelectorAll(bracketStyle != "swiss" ? ".group-bracket-wrapper, .elim-grid-wrapper" : ".group-round-wrapper");
                 transitionTl.clear();
                 if (event.detail.active) {
                     //create a delay in the animation
