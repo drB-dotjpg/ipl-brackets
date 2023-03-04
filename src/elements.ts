@@ -35,6 +35,8 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
 
     const roundElims: HTMLElement[] = [];
     const roundsNum = Math.max(...matches.map(o => o.roundNumber));
+    const horConnectorElims: HTMLElement[] = [];
+    const vertConnectorElims: HTMLElement[] = [];
 
     if (minRound <= 0){
         minRound = 1;
@@ -65,6 +67,22 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         roundElim.appendChild(roundHeader);
         roundElims.push(roundElim);
         element.appendChild(roundElim);
+
+        if (i < roundsNum - 1){
+            const horConnector = document.createElement("div");
+            horConnector.className = "elim-grid-wrapper hor-connector";
+            const connectorHeader = document.createElement("div");
+            connectorHeader.className = "grid-header";
+            horConnector.appendChild(connectorHeader);
+            horConnectorElims.push(horConnector);
+            element.appendChild(horConnector);
+
+            const vertConnector = horConnector.cloneNode(true) as HTMLElement;
+            vertConnector.classList.remove("hor-connector");
+            vertConnector.classList.add("vert-connector");
+            vertConnectorElims.push(vertConnector);
+            element.appendChild(vertConnector);
+        }
     }
 
     for (var i = 0; i < matches.length; i++){
@@ -79,7 +97,41 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         }
     }
 
+    for (var i = 0; i < matches.length; i++){
+        if (matches[i].roundNumber >= minRound && matches[i].roundNumber < roundsNum && matches[i].roundNumber != 0) {
+            const horConnector = document.createElement("div");
+            horConnector.style.width = "15px";
+            horConnector.style.height = "1px";
+            horConnector.style.background = "var(--connector-color)";
+            horConnectorElims[matches[i].roundNumber-minRound].appendChild(horConnector);
+
+            if (roundElims[matches[i].roundNumber-minRound].childNodes.length % 2 == 1
+                && getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber-minRound]) != getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber-minRound + 1])){
+                const vertConnector = document.createElement("div");
+                vertConnector.style.width = "1px";
+                vertConnector.style.height = "100%";
+                if (i % 2 == 1){
+                    vertConnector.style.background = "linear-gradient(0deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
+                } else {
+                    vertConnector.style.background = "linear-gradient(180deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
+                }
+                vertConnectorElims[matches[i].roundNumber-minRound].appendChild(vertConnector);
+            }
+        }
+    }
+
     return element;
+}
+
+function getNumberChildrenWithoutThird(element: HTMLElement){
+    let count = 0;
+    for (var i = 0; i < element.childNodes.length; i++){
+        const child = element.childNodes[i] as HTMLElement;
+        if (!child.classList.contains("elim-third")){
+            count++;
+        }
+    }
+    return count;
 }
 
 function getEliminationStyleMatchElement(match: Match): HTMLElement {

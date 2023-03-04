@@ -41,15 +41,26 @@ async function pageLoad(){
 
     centerOnElements();
 
+    var inOBS = navigator.userAgent.includes("OBS");
+    
     window.addEventListener('obsSourceActiveChanged', async function(event: any) {
-        console.log("OBS Source Active Changed: ", event.detail.active);
+        if (inOBS){
+            console.log("OBS Source Active Changed:", event.detail.active);
+        } else {
+            console.log("Graphic is not open in OBS! Soruce active set manually to:", event.detail.active);
+        }
+        
         const animElements = document.querySelectorAll(bracketStyle != "swiss" ? ".group-bracket-wrapper, .elim-grid-wrapper" : ".group-round-wrapper");
         transitionTl.clear();
         if (event.detail.active){
             transitionTl.set({}, {}, "+=.35");
             const speed = Math.min(1.1 / animElements.length, .2);
             for (var i = 0; i < animElements.length; i++){
-                transitionTl.fromTo(animElements[i], {scale: .9, opacity: 0}, {scale: 1, duration: .85, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
+                if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")){
+                    transitionTl.fromTo(animElements[i], {scale: .9, opacity: 0}, {scale: 1, duration: .85, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
+                } else {
+                    transitionTl.fromTo(animElements[i], {opacity: 0}, {duration: .35, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
+                }
             }
         } else {
             for (var i = 0; i < animElements.length; i++){
@@ -59,7 +70,6 @@ async function pageLoad(){
         }
     });
 
-    var inOBS = navigator.userAgent.includes("OBS");
     var obsEvent = new CustomEvent("obsSourceActiveChanged", {'detail': {
         "active": !inOBS
     }});

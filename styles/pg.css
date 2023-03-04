@@ -8,6 +8,7 @@
     --purple-a: #7D30F022;
     --indigo: #3E0099;
     --yellow: #FFE80A;
+    --connector-color: var(--indigo);
 }
 
 body {
@@ -51,7 +52,7 @@ body {
     grid-template-columns: 1fr;
     grid-template-rows: 1.5em auto;
     align-items: center;
-    margin: 0 .5em;
+    /* margin: 0 .5em; */
     
 }
 
@@ -114,6 +115,13 @@ body {
     color: white;
     background-color: var(--purple);
     border-left: 1px solid var(--indigo);
+}
+
+.vert-connector {
+    position: relative;
+    right: 1px;
+    width: 0px;
+    z-index: -10;
 }
 
 .group-bracket-wrapper {

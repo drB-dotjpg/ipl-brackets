@@ -43,16 +43,27 @@ function pageLoad() {
             }, refresh * 1000);
         }
         centerOnElements();
+        var inOBS = navigator.userAgent.includes("OBS");
         window.addEventListener('obsSourceActiveChanged', function (event) {
             return __awaiter(this, void 0, void 0, function* () {
-                console.log("OBS Source Active Changed: ", event.detail.active);
+                if (inOBS) {
+                    console.log("OBS Source Active Changed:", event.detail.active);
+                }
+                else {
+                    console.log("Graphic is not open in OBS! Soruce active set manually to:", event.detail.active);
+                }
                 const animElements = document.querySelectorAll(bracketStyle != "swiss" ? ".group-bracket-wrapper, .elim-grid-wrapper" : ".group-round-wrapper");
                 transitionTl.clear();
                 if (event.detail.active) {
                     transitionTl.set({}, {}, "+=.35");
                     const speed = Math.min(1.1 / animElements.length, .2);
                     for (var i = 0; i < animElements.length; i++) {
-                        transitionTl.fromTo(animElements[i], { scale: .9, opacity: 0 }, { scale: 1, duration: .85, opacity: 1, ease: "power3.out" }, `<+=${speed}`);
+                        if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")) {
+                            transitionTl.fromTo(animElements[i], { scale: .9, opacity: 0 }, { scale: 1, duration: .85, opacity: 1, ease: "power3.out" }, `<+=${speed}`);
+                        }
+                        else {
+                            transitionTl.fromTo(animElements[i], { opacity: 0 }, { duration: .35, opacity: 1, ease: "power3.out" }, `<+=${speed}`);
+                        }
                     }
                 }
                 else {
@@ -63,7 +74,6 @@ function pageLoad() {
                 }
             });
         });
-        var inOBS = navigator.userAgent.includes("OBS");
         var obsEvent = new CustomEvent("obsSourceActiveChanged", { 'detail': {
                 "active": !inOBS
             } });
@@ -372,9 +382,9 @@ function centerOnElements(smooth = false) {
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 320)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
         if (targetWidth * scale > root.clientWidth) {
-            scale = (root.clientWidth / Math.max(targetWidth, 320)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
         }
     }
     moveCamera((root.clientWidth - maxWidth * scale - minWidth * scale) / 2, (root.clientHeight - maxHeight * scale - minHeight * scale) / 2, scale, smooth);
@@ -436,6 +446,8 @@ function getEliminationElement(matches, minRound, roundNaming) {
     element.classList.add("bracket");
     const roundElims = [];
     const roundsNum = Math.max(...matches.map(o => o.roundNumber));
+    const horConnectorElims = [];
+    const vertConnectorElims = [];
     if (minRound <= 0) {
         minRound = 1;
     }
@@ -462,6 +474,20 @@ function getEliminationElement(matches, minRound, roundNaming) {
         roundElim.appendChild(roundHeader);
         roundElims.push(roundElim);
         element.appendChild(roundElim);
+        if (i < roundsNum - 1) {
+            const horConnector = document.createElement("div");
+            horConnector.className = "elim-grid-wrapper hor-connector";
+            const connectorHeader = document.createElement("div");
+            connectorHeader.className = "grid-header";
+            horConnector.appendChild(connectorHeader);
+            horConnectorElims.push(horConnector);
+            element.appendChild(horConnector);
+            const vertConnector = horConnector.cloneNode(true);
+            vertConnector.classList.remove("hor-connector");
+            vertConnector.classList.add("vert-connector");
+            vertConnectorElims.push(vertConnector);
+            element.appendChild(vertConnector);
+        }
     }
     for (var i = 0; i < matches.length; i++) {
         const elim = getEliminationStyleMatchElement(matches[i]);
@@ -475,7 +501,39 @@ function getEliminationElement(matches, minRound, roundNaming) {
             roundElim.style.minHeight = "12em";
         }
     }
+    for (var i = 0; i < matches.length; i++) {
+        if (matches[i].roundNumber >= minRound && matches[i].roundNumber < roundsNum && matches[i].roundNumber != 0) {
+            const horConnector = document.createElement("div");
+            horConnector.style.width = "15px";
+            horConnector.style.height = "1px";
+            horConnector.style.background = "var(--connector-color)";
+            horConnectorElims[matches[i].roundNumber - minRound].appendChild(horConnector);
+            if (roundElims[matches[i].roundNumber - minRound].childNodes.length % 2 == 1
+                && getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber - minRound]) != getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber - minRound + 1])) {
+                const vertConnector = document.createElement("div");
+                vertConnector.style.width = "1px";
+                vertConnector.style.height = "100%";
+                if (i % 2 == 1) {
+                    vertConnector.style.background = "linear-gradient(0deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
+                }
+                else {
+                    vertConnector.style.background = "linear-gradient(180deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
+                }
+                vertConnectorElims[matches[i].roundNumber - minRound].appendChild(vertConnector);
+            }
+        }
+    }
     return element;
+}
+function getNumberChildrenWithoutThird(element) {
+    let count = 0;
+    for (var i = 0; i < element.childNodes.length; i++) {
+        const child = element.childNodes[i];
+        if (!child.classList.contains("elim-third")) {
+            count++;
+        }
+    }
+    return count;
 }
 function getEliminationStyleMatchElement(match) {
     const element = document.createElement("div");
