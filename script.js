@@ -49,10 +49,10 @@ function pageLoad() {
                 const animElements = document.querySelectorAll(bracketStyle != "swiss" ? ".group-bracket-wrapper, .elim-grid-wrapper" : ".group-round-wrapper");
                 transitionTl.clear();
                 if (event.detail.active) {
-                    //create a delay in the animation
                     transitionTl.set({}, {}, "+=.35");
+                    const speed = Math.min(1.1 / animElements.length, .2);
                     for (var i = 0; i < animElements.length; i++) {
-                        transitionTl.fromTo(animElements[i], { scale: .9, opacity: 0 }, { scale: 1, duration: .85, opacity: 1, ease: "power3.out" }, "<+=.06");
+                        transitionTl.fromTo(animElements[i], { scale: .9, opacity: 0 }, { scale: 1, duration: .85, opacity: 1, ease: "power3.out" }, `<+=${speed}`);
                     }
                 }
                 else {
