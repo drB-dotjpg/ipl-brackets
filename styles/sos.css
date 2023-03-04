@@ -7,6 +7,7 @@
     --dark-teal: #335563;
     --blue-grey: #4D6C72;
     --dark-blue: #191A34;
+    --connector-color: var(--blue-grey);
 }
 
 body {
@@ -51,7 +52,7 @@ body {
     grid-template-columns: 1fr;
     grid-template-rows: 1.5em auto;
     align-items: center;
-    margin: 0 .5em;
+    /* margin: 0 .5em; */
     
 }
 
@@ -117,6 +118,13 @@ body {
     color: var(--dark-blue);
     background-color: var(--off-white);
     border-left: 1px solid var(--dark-teal);
+}
+
+.vert-connector {
+    position: relative;
+    right: 1px;
+    width: 0px;
+    z-index: -10;
 }
 
 .group-bracket-wrapper {

@@ -59,7 +59,7 @@ async function pageLoad(){
                 if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")){
                     transitionTl.fromTo(animElements[i], {scale: .9, opacity: 0}, {scale: 1, duration: .85, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
                 } else {
-                    transitionTl.fromTo(animElements[i], {opacity: 0}, {duration: .35, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
+                    gsap.fromTo(animElements[i], {opacity: 0}, {duration: .35, delay: 1 + (i * .02), opacity: 1, ease: "power3.out"});
                 }
             }
         } else {
