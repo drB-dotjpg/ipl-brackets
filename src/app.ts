@@ -1,4 +1,5 @@
 declare var gsap: any;
+const transitionTl = gsap.timeline();
 
 async function pageLoad(){
     const urlParams = new URLSearchParams(window.location.search);
@@ -40,6 +41,30 @@ async function pageLoad(){
 
     centerOnElements();
 
+    window.addEventListener('obsSourceActiveChanged', async function(event: any) {
+        console.log("OBS Source Active Changed: ", event.detail.active);
+        const animElements = document.querySelectorAll(".group-bracket-wrapper, .elim-grid-wrapper");
+        transitionTl.clear();
+        if (event.detail.active){
+            //create a delay in the animation
+            transitionTl.set({}, {}, "+=.35");
+            for (var i = 0; i < animElements.length; i++){
+                transitionTl.fromTo(animElements[i], {scale: .9, opacity: 0}, {scale: 1, duration: .85, opacity: 1, ease: "power3.out"}, "<+=.06");
+            }
+        } else {
+            for (var i = 0; i < animElements.length; i++){
+                (animElements[i] as HTMLElement).style.opacity = "0";
+                (animElements[i] as HTMLElement).style.transform = "scale(.9)";
+            }
+        }
+    });
+
+    var inOBS = navigator.userAgent.includes("OBS");
+    var obsEvent = new CustomEvent("obsSourceActiveChanged", {'detail': {
+        "active": !inOBS
+    }});
+    window.dispatchEvent(obsEvent);
+
     console.log("Graphic Data: ", {
         bracketId,
         bracketStyle,
@@ -48,7 +73,8 @@ async function pageLoad(){
         minRound,
         focus,
         title,
-        refresh
+        refresh,
+        inOBS
     })
 }
 
@@ -113,7 +139,6 @@ async function autoRefresh(){
 
                         const domRect = element.getBoundingClientRect();
                         const scale = parseFloat((document.querySelector("#zoom") as HTMLElement).style.transform.replace("scale(", "").replace(")", ""));
-                        console.log(element, domRect.width, scale, domRect.width / scale);
                         element.style.width = `${domRect.width / scale}px`;
 
                         topName.innerText = match.topName === undefined ? "-" : getLimitedName(match.topName);
@@ -171,7 +196,6 @@ async function updateGraphicURLs(event){
     const matchesReq = await getMatchesFromBracketID(bracketId);
     const bracketType = matchesReq.bracketType;
     const numRounds = matchesReq.numRounds;
-    console.log(numRounds);
     const urls = [];
 
     switch (bracketType){

@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+const transitionTl = gsap.timeline();
 function pageLoad() {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
@@ -42,6 +43,31 @@ function pageLoad() {
             }, refresh * 1000);
         }
         centerOnElements();
+        window.addEventListener('obsSourceActiveChanged', function (event) {
+            return __awaiter(this, void 0, void 0, function* () {
+                console.log("OBS Source Active Changed: ", event.detail.active);
+                const animElements = document.querySelectorAll(".group-bracket-wrapper, .elim-grid-wrapper");
+                transitionTl.clear();
+                if (event.detail.active) {
+                    //create a delay in the animation
+                    transitionTl.set({}, {}, "+=.35");
+                    for (var i = 0; i < animElements.length; i++) {
+                        transitionTl.fromTo(animElements[i], { scale: .9, opacity: 0 }, { scale: 1, duration: .85, opacity: 1, ease: "power3.out" }, "<+=.06");
+                    }
+                }
+                else {
+                    for (var i = 0; i < animElements.length; i++) {
+                        animElements[i].style.opacity = "0";
+                        animElements[i].style.transform = "scale(.9)";
+                    }
+                }
+            });
+        });
+        var inOBS = navigator.userAgent.includes("OBS");
+        var obsEvent = new CustomEvent("obsSourceActiveChanged", { 'detail': {
+                "active": !inOBS
+            } });
+        window.dispatchEvent(obsEvent);
         console.log("Graphic Data: ", {
             bracketId,
             bracketStyle,
@@ -50,7 +76,8 @@ function pageLoad() {
             minRound,
             focus,
             title,
-            refresh
+            refresh,
+            inOBS
         });
     });
 }
@@ -113,7 +140,6 @@ function autoRefresh() {
                         tl.to(element, { opacity: 0, duration: 1, ease: "power2.in", onComplete: () => {
                                 const domRect = element.getBoundingClientRect();
                                 const scale = parseFloat(document.querySelector("#zoom").style.transform.replace("scale(", "").replace(")", ""));
-                                console.log(element, domRect.width, scale, domRect.width / scale);
                                 element.style.width = `${domRect.width / scale}px`;
                                 topName.innerText = match.topName === undefined ? "-" : getLimitedName(match.topName);
                                 bottomName.innerText = match.bottomName === undefined ? "-" : getLimitedName(match.bottomName);
@@ -171,7 +197,6 @@ function updateGraphicURLs(event) {
         const matchesReq = yield getMatchesFromBracketID(bracketId);
         const bracketType = matchesReq.bracketType;
         const numRounds = matchesReq.numRounds;
-        console.log(numRounds);
         const urls = [];
         switch (bracketType) {
             case "doubleelim":
