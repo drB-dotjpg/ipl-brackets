@@ -83,6 +83,10 @@ body {
     margin: .13em 0;
 }
 
+.compact {
+    font-size: .65em;
+}
+
 .elim-round-wrapper > .team-wrapper {
     display: flex;
     align-items: baseline;
@@ -219,19 +223,19 @@ body {
 }
 
 div[data-round-status="in-progress"]{
-    animation: in-prog-flash 1.5s infinite;
-    border: 2px solid;
+    animation: in-prog-flash 2.5s infinite;
+    border: .05em solid;
 }
 
 @keyframes in-prog-flash {
     0% {
-        border-color: var(--red);
+        border-color: #F00A4B99;
     }
     50% {
         border-color: var(--lighter-blue);
     }
     100% {
-        border-color: var(--red);
+        border-color: #F00A4B99;
     }
 }
 

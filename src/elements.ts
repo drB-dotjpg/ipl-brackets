@@ -107,6 +107,20 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
         }
     }
 
+    for (var i = 0; i < roundElims.length; i++){
+        if (roundElims[i].childNodes.length >= 16 || (doubleElim && roundElims[i].childNodes.length >= 8)){
+            if (i > 0 && roundElims[i-1].childNodes.length != roundElims[i].childNodes.length){
+                continue;
+            }
+            for (var j = 0; j < roundElims[i].childNodes.length; j++){
+                const match = roundElims[i].childNodes[j] as HTMLElement;
+                match.classList.add("compact");
+            }
+        } else {
+            break
+        }
+    }
+
     const firstRoundSize = roundElims[0].childNodes.length - 1;
     if (firstRoundSize <= 4 && !doubleElim){
         roundElims[0].style.height = Math.max(firstRoundSize * 80, 200) + "px";

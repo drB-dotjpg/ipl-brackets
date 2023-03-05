@@ -85,6 +85,10 @@ body {
     box-shadow: -3px 1.5px 0px var(--indigo);
 }
 
+.compact {
+    font-size: .655em;
+}
+
 .elim-round-wrapper > .team-wrapper {
     display: flex;
     align-items: baseline;
@@ -237,25 +241,29 @@ body {
 }
 
 div[data-round-status="in-progress"]{
-    animation: in-prog-flash 2s infinite;
+    animation: in-prog-flash 3s infinite;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes in-prog-flash {
     0% {
-        border-color: var(--indigo);
+        box-shadow: -4px 2px 0px var(--indigo);
+
     }
     50% {
-        border-color: var(--yellow);
+        box-shadow: -1.5px 1px 0px var(--yellow);
+
     }
     100% {
-        border-color: var(--indigo);
+        box-shadow: -4px 2px 0px var(--indigo);
+
     }
 }
 
 div[data-round-status="not-started"]{
     background-color: #FBFBFB44;
     border-color: #3E009944;
-    box-shadow: -3px 1.5px 0px #3E009944;
+    box-shadow: -2px 1px 0px #3E009944;
 }
 
 div[data-round-status="not-started"] > *{

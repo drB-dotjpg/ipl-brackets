@@ -103,6 +103,10 @@ body {
     overflow: hidden;
 }
 
+.compact {
+    font-size: .65em;
+}
+
 .elim-round-wrapper > .team-wrapper {
     display: flex;
     align-items: baseline;
@@ -245,19 +249,19 @@ body {
 }
 
 div[data-round-status="in-progress"]{
-    animation: in-prog-flash 2s infinite;
-    border: 1px solid var(--light-grey);
+    animation: in-prog-flash 2.5s infinite;
+    border: .02em solid var(--light-grey);
 }
 
 @keyframes in-prog-flash {
     0% {
-        border-color: var(--orange);
+        border-color: var(--orange-a);
     }
     50% {
         border-color: var(--light-grey);
     }
     100% {
-        border-color: var(--orange);
+        border-color: var(--orange-a);
     }
 }
 

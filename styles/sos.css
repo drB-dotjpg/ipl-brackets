@@ -89,6 +89,10 @@ body {
     box-shadow: 0 0 32px #19191944;
 }
 
+.compact {
+    font-size: .65em;
+}
+
 .elim-round-wrapper > .team-wrapper {
     display: flex;
     align-items: baseline;
