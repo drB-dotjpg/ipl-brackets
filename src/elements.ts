@@ -12,10 +12,10 @@ function getDoubleEliminationElement(matches: Match[], minRound: number, focus: 
         }
     }
 
-    const winnersElement: HTMLElement = getEliminationElement(winnersMatches, minRound, "winners");
+    const winnersElement: HTMLElement = getEliminationElement(winnersMatches, minRound, "winners", focus != "winners");
     winnersElement.dataset.bracketType = "winners";
     const losersMinRound = minRound == 1 ? minRound : minRound - 1;
-    const losersElement: HTMLElement = getEliminationElement(losersMatches, losersMinRound, "losers");
+    const losersElement: HTMLElement = getEliminationElement(losersMatches, losersMinRound, "losers", focus != "losers");
     losersElement.dataset.bracketType = "losers";
 
     if (focus != "losers"){
@@ -28,7 +28,7 @@ function getDoubleEliminationElement(matches: Match[], minRound: number, focus: 
     return element;
 }
 
-function getEliminationElement(matches: Match[], minRound: number, roundNaming?: "winners" | "losers") : HTMLElement {
+function getEliminationElement(matches: Match[], minRound: number, roundNaming?: "winners" | "losers", doubleElim = false) : HTMLElement {
     const element: HTMLElement = document.createElement("div");
     element.className = "elim-bracket-wrapper";
     element.classList.add("bracket");
@@ -98,13 +98,18 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
             roundElim.style.minHeight = "12em";
 
             elim.style.transformOrigin = "bottom left";
-            if (roundElims[0].childNodes.length < 8){
-                elim.style.marginLeft = "5px";
-                elim.style.scale = "0.7";
-            } else if (roundElims[0].childNodes.length < 16){
+            if (roundElims[0].childNodes.length < 16){
                 elim.style.scale = ".8";
             }
+            if (roundElims[0].childNodes.length < 4){
+                elim.style.marginLeft = "5px";
+            }
         }
+    }
+
+    const firstRoundSize = roundElims[0].childNodes.length - 1;
+    if (firstRoundSize <= 4 && !doubleElim){
+        roundElims[0].style.height = Math.max(firstRoundSize * 80, 200) + "px";
     }
 
     for (var i = 0; i < matches.length; i++){

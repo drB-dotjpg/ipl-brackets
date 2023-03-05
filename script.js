@@ -452,10 +452,10 @@ function getDoubleEliminationElement(matches, minRound, focus) {
             losersMatches.push(matches[i]);
         }
     }
-    const winnersElement = getEliminationElement(winnersMatches, minRound, "winners");
+    const winnersElement = getEliminationElement(winnersMatches, minRound, "winners", focus != "winners");
     winnersElement.dataset.bracketType = "winners";
     const losersMinRound = minRound == 1 ? minRound : minRound - 1;
-    const losersElement = getEliminationElement(losersMatches, losersMinRound, "losers");
+    const losersElement = getEliminationElement(losersMatches, losersMinRound, "losers", focus != "losers");
     losersElement.dataset.bracketType = "losers";
     if (focus != "losers") {
         element.appendChild(winnersElement);
@@ -465,7 +465,7 @@ function getDoubleEliminationElement(matches, minRound, focus) {
     }
     return element;
 }
-function getEliminationElement(matches, minRound, roundNaming) {
+function getEliminationElement(matches, minRound, roundNaming, doubleElim = false) {
     const element = document.createElement("div");
     element.className = "elim-bracket-wrapper";
     element.classList.add("bracket");
@@ -527,14 +527,17 @@ function getEliminationElement(matches, minRound, roundNaming) {
             roundElim.appendChild(elim);
             roundElim.style.minHeight = "12em";
             elim.style.transformOrigin = "bottom left";
-            if (roundElims[0].childNodes.length < 8) {
-                elim.style.marginLeft = "5px";
-                elim.style.scale = "0.7";
-            }
-            else if (roundElims[0].childNodes.length < 16) {
+            if (roundElims[0].childNodes.length < 16) {
                 elim.style.scale = ".8";
             }
+            if (roundElims[0].childNodes.length < 4) {
+                elim.style.marginLeft = "5px";
+            }
         }
+    }
+    const firstRoundSize = roundElims[0].childNodes.length - 1;
+    if (firstRoundSize <= 4 && !doubleElim) {
+        roundElims[0].style.height = Math.max(firstRoundSize * 80, 200) + "px";
     }
     for (var i = 0; i < matches.length; i++) {
         if (matches[i].roundNumber >= minRound && matches[i].roundNumber < roundsNum && matches[i].roundNumber != 0) {

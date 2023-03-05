@@ -64,8 +64,6 @@ async function pageLoad(){
 
             const speed = Math.min(1.1 / animElements.length, .2);
             for (var i = 0; i < animElements.length; i++){
-                
-
                 if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")){
                     transitionTl.fromTo(animElements[i], {scale: .9, opacity: 0}, {scale: 1, duration: .85, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
                 } else {
