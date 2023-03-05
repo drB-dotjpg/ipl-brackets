@@ -33,6 +33,8 @@ body {
     width: 1920px;
     height: calc(1080px - 60px);
     background-image: url("../assets/pg-bg.png");
+    background-color: var(--lavender);
+    background-repeat: repeat;
 }
 
 #camera {

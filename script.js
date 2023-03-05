@@ -18,6 +18,7 @@ function pageLoad() {
         const focus = (_c = urlParams.get("focus")) !== null && _c !== void 0 ? _c : "none";
         const title = urlParams.get("title");
         const refresh = parseInt(urlParams.get("refresh"));
+        const notStudio = urlParams.has("notStudioMode");
         const battlefyRes = yield getMatchesFromBracketID(bracketId);
         const bracketStyle = battlefyRes.bracketType;
         const matches = battlefyRes.matches;
@@ -46,8 +47,11 @@ function pageLoad() {
         var inOBS = navigator.userAgent.includes("OBS");
         window.addEventListener('obsSourceActiveChanged', function (event) {
             return __awaiter(this, void 0, void 0, function* () {
-                if (inOBS) {
+                if (inOBS && !notStudio) {
                     console.log("OBS Source Active Changed:", event.detail.active);
+                }
+                else if (inOBS && notStudio) {
+                    console.log("OBS is open but the notStudioMode flag is enabled. Setting soruce active to: ", event.detail.active);
                 }
                 else {
                     console.log("Graphic is not open in OBS! Soruce active set manually to:", event.detail.active);
@@ -56,8 +60,8 @@ function pageLoad() {
                 transitionTl.clear();
                 const connectorTl = gsap.timeline();
                 if (event.detail.active) {
-                    transitionTl.set({}, {}, "+=.35");
-                    connectorTl.set({}, {}, "+=.85");
+                    transitionTl.set({}, {}, "+=.45");
+                    connectorTl.set({}, {}, "+=.95");
                     const speed = Math.min(1.1 / animElements.length, .2);
                     for (var i = 0; i < animElements.length; i++) {
                         if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")) {
@@ -65,10 +69,10 @@ function pageLoad() {
                         }
                         else {
                             if (animElements[i].classList.contains("hor-connector")) {
-                                connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "15px", duration: .25, ease: "power3.in" }, `<-=.025`);
+                                connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "15px", duration: .25, ease: "power1.in" }, `<-=.025`);
                             }
                             else if (animElements[i].classList.contains("vert-connector")) {
-                                connectorTl.fromTo(animElements[i].children, { scale: 1, height: "0%" }, { height: "100%", duration: .45, ease: "power3.out" }, ">");
+                                connectorTl.fromTo(animElements[i].children, { scale: 1, height: "0%" }, { height: "100%", duration: .55, ease: "power4.out" }, ">");
                             }
                         }
                     }
@@ -92,7 +96,7 @@ function pageLoad() {
             });
         });
         var obsEvent = new CustomEvent("obsSourceActiveChanged", { 'detail': {
-                "active": !inOBS
+                "active": !inOBS || notStudio
             } });
         window.dispatchEvent(obsEvent);
         console.log("Graphic Data: ", {
@@ -104,7 +108,8 @@ function pageLoad() {
             focus,
             title,
             refresh,
-            inOBS
+            inOBS,
+            notStudio
         });
     });
 }

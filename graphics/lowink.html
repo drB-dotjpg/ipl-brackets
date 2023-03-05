@@ -15,6 +15,7 @@
             <div id="zoom" style="transform-origin: top left; transform: scale(0,0);"></div>
         </div>
     </div>
+    <div id="background"></div>
     <div style="font-family: 'Montserrat'; font-weight: 300; opacity: 0;">Font preload</div>
     <div style="font-family: 'Montserrat'; font-weight: 500; opacity: 0;">Font preload</div>
     <div style="font-family: 'Montserrat'; font-weight: 700; opacity: 0;">Font preload</div>
@@ -22,6 +23,8 @@
         window.addEventListener('load', function () {
             pageLoad();
         });
+
+        gsap.fromTo("#background", {backgroundPositionX: "0px"}, {backgroundPositionX: "-284px", duration: 20, repeat: -1, ease: "none"});
     </script>
 </body>
 </html>

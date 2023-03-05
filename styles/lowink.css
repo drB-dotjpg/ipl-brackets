@@ -31,7 +31,22 @@ body {
 #bracket-zone{
     width: 1920px;
     height: calc(1080px - 75px);
-    background: radial-gradient(circle, var(--grey) 0%, var(--orange) 800%);
+    background: radial-gradient(circle, transparent 0%, var(--orange) 800%);
+}
+
+#background {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    background: url(../assets/li-bg.png);
+    background-color: var(--grey);
+    background-size: 284px;
+    background-position: bottom;
+    background-repeat: repeat;
+    background-position-x: 0;
 }
 
 #camera {
@@ -236,6 +251,6 @@ div[data-round-status="in-progress"]{
 }
 
 div[data-round-status="not-started"]{
-    background-color: transparent;
-    filter: saturate(.6) brightness(.8);
+    background-color: #19191940;
+    filter: saturate(.6) brightness(.6);
 }
