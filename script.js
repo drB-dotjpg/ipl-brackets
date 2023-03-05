@@ -70,7 +70,7 @@ function pageLoad() {
                         }
                         else {
                             if (animElements[i].classList.contains("hor-connector")) {
-                                connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "15px", duration: .25, ease: "power1.in" }, `<+=${speed / 4}`);
+                                connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "17px", duration: .25, ease: "power1.in" }, "<");
                             }
                             else if (animElements[i].classList.contains("vert-connector")) {
                                 connectorTl.fromTo(animElements[i].children, { scale: 1, height: "0%" }, { height: "100%", duration: .55, ease: "power4.out" }, ">");
@@ -407,9 +407,9 @@ function centerOnElements(smooth = false) {
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 350)) * .97;
         if (targetWidth * scale > root.clientWidth) {
-            scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 350)) * .97;
         }
     }
     moveCamera((root.clientWidth - maxWidth * scale - minWidth * scale) / 2, (root.clientHeight - maxHeight * scale - minHeight * scale) / 2, scale, smooth);

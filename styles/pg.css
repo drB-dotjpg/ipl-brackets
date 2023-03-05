@@ -55,7 +55,14 @@ body {
     grid-template-rows: 1.5em auto;
     align-items: center;
     /* margin: 0 .5em; */
-    
+    position: relative;
+    right: 2px;
+}
+
+.hor-connector {
+    right: 2px;
+    width: 17px;
+    z-index: -1;
 }
 
 .elim-grid-wrapper > .grid-header{
@@ -73,7 +80,7 @@ body {
     flex-wrap: nowrap;
     background-color: var(--off-white);
     font-size: .8em;
-    margin: .1em 0;
+    margin: .21em 0;
     border: 1px solid var(--indigo);
     box-shadow: -3px 1.5px 0px var(--indigo);
 }

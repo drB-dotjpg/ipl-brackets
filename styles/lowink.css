@@ -67,7 +67,13 @@ body {
     grid-template-rows: 1.5em auto;
     align-items: center;
     /* margin: 0 .5em; */
-    
+    position: relative;
+    right: 2px;
+}
+
+.hor-connector {
+    right: 2px;
+    width: 17px;
 }
 
 .elim-grid-wrapper > .grid-header{

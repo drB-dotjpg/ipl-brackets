@@ -53,7 +53,13 @@ body {
     grid-template-rows: 1.5em auto;
     align-items: center;
     /* margin: 0 .5em; */
-    
+    position: relative;
+    right: 2px;
+}
+
+.hor-connector {
+    right: 2px;
+    width: 17px;
 }
 
 .elim-grid-wrapper > .grid-header{
@@ -94,8 +100,8 @@ body {
 .elim-round-wrapper > .team-wrapper > .seed {
     font-weight: 400;
     transform-origin: center;
-    transform: scale(.8);
-    opacity: .85;
+    transform: scale(.7);
+    opacity: .75;
     min-width: 1.2em;
     text-align: center;
     margin-right: .35em;
