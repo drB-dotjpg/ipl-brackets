@@ -81,7 +81,7 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
             const vertConnector = horConnector.cloneNode(true) as HTMLElement;
             vertConnector.classList.remove("hor-connector");
             vertConnector.classList.add("vert-connector");
-            vertConnector.style.width = "";
+            vertConnector.style.width = "1px";
             vertConnectorElims.push(vertConnector);
             element.appendChild(vertConnector);
         }
@@ -118,6 +118,7 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
                 && getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber-minRound]) != getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber-minRound + 1])){
                 const vertConnector = document.createElement("div");
                 vertConnector.style.width = "1px";
+                vertConnector.style.height = "100%";
                 if (i % 2 == 1){
                     vertConnector.style.background = "linear-gradient(0deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
                 } else {

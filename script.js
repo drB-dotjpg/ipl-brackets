@@ -19,6 +19,7 @@ function pageLoad() {
         const title = urlParams.get("title");
         const refresh = parseInt(urlParams.get("refresh"));
         const notStudio = urlParams.has("notStudioMode");
+        const noAnim = urlParams.has("noAnim");
         const battlefyRes = yield getMatchesFromBracketID(bracketId);
         const bracketStyle = battlefyRes.bracketType;
         const matches = battlefyRes.matches;
@@ -61,7 +62,7 @@ function pageLoad() {
                 const connectorTl = gsap.timeline();
                 if (event.detail.active) {
                     transitionTl.set({}, {}, "+=.45");
-                    connectorTl.set({}, {}, "+=.95");
+                    connectorTl.set({}, {}, "+=.85");
                     const speed = Math.min(1.1 / animElements.length, .2);
                     for (var i = 0; i < animElements.length; i++) {
                         if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")) {
@@ -69,7 +70,7 @@ function pageLoad() {
                         }
                         else {
                             if (animElements[i].classList.contains("hor-connector")) {
-                                connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "15px", duration: .25, ease: "power1.in" }, `<-=.025`);
+                                connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "15px", duration: .25, ease: "power1.in" }, `<+=${speed / 4}`);
                             }
                             else if (animElements[i].classList.contains("vert-connector")) {
                                 connectorTl.fromTo(animElements[i].children, { scale: 1, height: "0%" }, { height: "100%", duration: .55, ease: "power4.out" }, ">");
@@ -98,7 +99,9 @@ function pageLoad() {
         var obsEvent = new CustomEvent("obsSourceActiveChanged", { 'detail': {
                 "active": !inOBS || notStudio
             } });
-        window.dispatchEvent(obsEvent);
+        if (!noAnim) {
+            window.dispatchEvent(obsEvent);
+        }
         console.log("Graphic Data: ", {
             bracketId,
             bracketStyle,
@@ -508,7 +511,7 @@ function getEliminationElement(matches, minRound, roundNaming) {
             const vertConnector = horConnector.cloneNode(true);
             vertConnector.classList.remove("hor-connector");
             vertConnector.classList.add("vert-connector");
-            vertConnector.style.width = "";
+            vertConnector.style.width = "1px";
             vertConnectorElims.push(vertConnector);
             element.appendChild(vertConnector);
         }
@@ -543,6 +546,7 @@ function getEliminationElement(matches, minRound, roundNaming) {
                 && getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber - minRound]) != getNumberChildrenWithoutThird(roundElims[matches[i].roundNumber - minRound + 1])) {
                 const vertConnector = document.createElement("div");
                 vertConnector.style.width = "1px";
+                vertConnector.style.height = "100%";
                 if (i % 2 == 1) {
                     vertConnector.style.background = "linear-gradient(0deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
                 }

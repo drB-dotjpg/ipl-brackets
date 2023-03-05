@@ -10,6 +10,7 @@ async function pageLoad(){
     const title = urlParams.get("title");
     const refresh = parseInt(urlParams.get("refresh"));
     const notStudio = urlParams.has("notStudioMode");
+    const noAnim = urlParams.has("noAnim");
 
     const battlefyRes = await getMatchesFromBracketID(bracketId);
     const bracketStyle = battlefyRes.bracketType;
@@ -59,15 +60,17 @@ async function pageLoad(){
 
         if (event.detail.active){
             transitionTl.set({}, {}, "+=.45");
-            connectorTl.set({}, {}, "+=.95");
+            connectorTl.set({}, {}, "+=.85");
 
             const speed = Math.min(1.1 / animElements.length, .2);
             for (var i = 0; i < animElements.length; i++){
+                
+
                 if (!animElements[i].classList.contains("hor-connector") && !animElements[i].classList.contains("vert-connector")){
                     transitionTl.fromTo(animElements[i], {scale: .9, opacity: 0}, {scale: 1, duration: .85, opacity: 1, ease: "power3.out"}, `<+=${speed}`);
                 } else {
                     if (animElements[i].classList.contains("hor-connector")){
-                        connectorTl.fromTo(animElements[i].children, {scale: 1, width: "0"}, {width: "15px", duration: .25, ease: "power1.in"}, `<-=.025`);
+                        connectorTl.fromTo(animElements[i].children, {scale: 1, width: "0"}, {width: "15px", duration: .25, ease: "power1.in"}, `<+=${speed/4}`);
                     } else if (animElements[i].classList.contains("vert-connector")) {
                         connectorTl.fromTo(animElements[i].children, {scale: 1, height: "0%"}, {height: "100%", duration: .55, ease: "power4.out"}, ">");
                     }
@@ -92,7 +95,10 @@ async function pageLoad(){
     var obsEvent = new CustomEvent("obsSourceActiveChanged", {'detail': {
         "active": !inOBS || notStudio
     }});
-    window.dispatchEvent(obsEvent);
+    if (!noAnim)
+    {
+        window.dispatchEvent(obsEvent);
+    }
 
     console.log("Graphic Data: ", {
         bracketId,
