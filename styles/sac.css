@@ -69,6 +69,10 @@ body {
     margin-bottom: .5em;
 }
 
+.elim-grid-wrapper:not(:first-of-type) > .elim-round-wrapper:not(.elim-third, .no-smooth-connector){
+    margin-left: 1px;
+}
+
 .elim-round-wrapper {
     display: flex;
     flex-direction: column;

@@ -70,6 +70,10 @@ body {
     margin-bottom: .5em;
 }
 
+.elim-grid-wrapper:not(:first-of-type) > .elim-round-wrapper:not(.elim-third, .no-smooth-connector){
+    border-radius: 0 .6em .6em 0;
+}
+
 .elim-round-wrapper {
     display: flex;
     flex-direction: column;
@@ -78,10 +82,10 @@ body {
     color: white;
     background: linear-gradient(180deg, var(--blue-grey) -100%, var(--dark-blue) 100%);
     font-size: .8em;
-    margin: .1em 0;
+    margin: .12em 0;
     border: 1px solid var(--dark-teal);
     overflow: hidden;
-    border-radius: .65em;
+    border-radius: .6em;
     box-shadow: 0 0 32px #19191944;
 }
 

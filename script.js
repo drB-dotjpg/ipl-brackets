@@ -73,7 +73,7 @@ function pageLoad() {
                                 connectorTl.fromTo(animElements[i].children, { scale: 1, width: "0" }, { width: "17px", duration: .25, ease: "power1.in" }, "<");
                             }
                             else if (animElements[i].classList.contains("vert-connector")) {
-                                connectorTl.fromTo(animElements[i].children, { scale: 1, height: "0%" }, { height: "100%", duration: .55, ease: "power4.out" }, ">");
+                                connectorTl.fromTo(animElements[i].children, { scale: 1, height: "0%" }, { height: "100%", duration: .55, ease: "power2.out" }, ">");
                             }
                         }
                     }
@@ -401,15 +401,15 @@ function centerOnElements(smooth = false) {
     const targetHeight = maxHeight - minHeight;
     var scale = 1;
     if (targetWidth > root.clientWidth) {
-        scale = (root.clientWidth / Math.max(targetWidth, 400)) * .97;
+        scale = (root.clientWidth / Math.max(targetWidth, 350)) * .97;
         if (targetHeight * scale > root.clientHeight) {
-            scale = (root.clientHeight / Math.max(targetHeight, 400)) * .97;
+            scale = (root.clientHeight / Math.max(targetHeight, 350)) * .97;
         }
     }
     else {
-        scale = (root.clientHeight / Math.max(targetHeight, 350)) * .97;
+        scale = (root.clientHeight / Math.max(targetHeight, 350)) * .96;
         if (targetWidth * scale > root.clientWidth) {
-            scale = (root.clientWidth / Math.max(targetWidth, 350)) * .97;
+            scale = (root.clientWidth / Math.max(targetWidth, 350)) * .96;
         }
     }
     moveCamera((root.clientWidth - maxWidth * scale - minWidth * scale) / 2, (root.clientHeight - maxHeight * scale - minHeight * scale) / 2, scale, smooth);
@@ -557,6 +557,12 @@ function getEliminationElement(matches, minRound, roundNaming, doubleElim = fals
                     vertConnector.style.background = "linear-gradient(180deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
                 }
                 vertConnectorElims[matches[i].roundNumber - minRound].appendChild(vertConnector);
+            }
+            else {
+                for (var j = 0; j < roundElims[matches[i].roundNumber - minRound + 1].childNodes.length; j++) {
+                    const child = roundElims[matches[i].roundNumber - minRound + 1].childNodes[j];
+                    child.classList.add("no-smooth-connector");
+                }
             }
         }
     }

@@ -70,7 +70,7 @@ async function pageLoad(){
                     if (animElements[i].classList.contains("hor-connector")){
                         connectorTl.fromTo(animElements[i].children, {scale: 1, width: "0"}, {width: "17px", duration: .25, ease: "power1.in"}, "<");
                     } else if (animElements[i].classList.contains("vert-connector")) {
-                        connectorTl.fromTo(animElements[i].children, {scale: 1, height: "0%"}, {height: "100%", duration: .55, ease: "power4.out"}, ">");
+                        connectorTl.fromTo(animElements[i].children, {scale: 1, height: "0%"}, {height: "100%", duration: .55, ease: "power2.out"}, ">");
                     }
                 }
             }

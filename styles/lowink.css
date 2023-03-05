@@ -84,6 +84,11 @@ body {
     margin-bottom: .5em;
 }
 
+.elim-grid-wrapper:not(:first-of-type) > .elim-round-wrapper:not(.elim-third, .no-smooth-connector){
+    border-radius: 0 4px 4px 0;
+    margin-left: 1px;
+}
+
 .elim-round-wrapper {
     display: flex;
     flex-direction: column;

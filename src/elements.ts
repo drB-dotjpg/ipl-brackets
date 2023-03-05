@@ -130,6 +130,11 @@ function getEliminationElement(matches: Match[], minRound: number, roundNaming?:
                     vertConnector.style.background = "linear-gradient(180deg, transparent 50%, var(--connector-color) 50%, var(--connector-color) 100%)";
                 }
                 vertConnectorElims[matches[i].roundNumber-minRound].appendChild(vertConnector);
+            } else {
+                for (var j = 0; j < roundElims[matches[i].roundNumber-minRound+1].childNodes.length; j++){
+                    const child = roundElims[matches[i].roundNumber-minRound+1].childNodes[j] as HTMLElement;
+                    child.classList.add("no-smooth-connector");
+                }
             }
         }
     }
