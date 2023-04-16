@@ -648,7 +648,7 @@ function getEliminationStyleMatchElement(match) {
 }
 function getSwissElement(matches, round) {
     const element = document.createElement("div");
-    element.className = "group-bracket-wrapper";
+    element.className = "swiss group-bracket-wrapper";
     element.classList.add("bracket");
     for (var i = 0; i < matches.length; i++) {
         if (matches[i].roundNumber == round) {

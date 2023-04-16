@@ -211,6 +211,15 @@ body {
     background-color: var(--light-grey);
 }
 
+.swiss {
+    display: grid;
+    /* css grid up to 32 items per column */
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(16, 1fr);
+    grid-gap: .15em;
+}
+
 .roundrobin-bracket-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
