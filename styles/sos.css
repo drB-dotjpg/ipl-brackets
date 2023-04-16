@@ -199,6 +199,14 @@ body {
     font-weight: 700;
 }
 
+.swiss {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(16, 1fr);
+    grid-gap: .15em;
+    column-gap: .25em;
+}
 
 .roundrobin-bracket-wrapper {
     display: grid;

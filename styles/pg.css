@@ -195,6 +195,15 @@ body {
     border-right-width: 2px;
 }
 
+.swiss {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(16, 1fr);
+    grid-gap: .15em;
+    column-gap: .5em;
+}
+
 .roundrobin-bracket-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
