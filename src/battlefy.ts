@@ -48,6 +48,8 @@ async function getElimOrSwissMatches(id: string): Promise<Match[]> {
         return response.json();
     })
     .then((bracketResponse) => {
+        bracketResponse.sort((a, b) => a.matchNumber - b.matchNumber);
+
         for (var i = 0; i < bracketResponse.length; i++){
 
             const game = bracketResponse[i];
